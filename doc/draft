@@ -1,43 +1,78 @@
-Serialized data:
-[0] - struct type (should it be extended to a 2 bytes?)
-[1] - size of entire packet (including struct type and this size. Maybe 2 bytes?)
-[2..3] - field flags
-[4..size-5] - data
+Zserializowane dane:
+[0] - typ struktury
+[1..2] - rozmiar struktury pakietu(³±cznie z typem struktury i rozmiarem)
+[3..4] - flaga dostêpno¶ci zmiennych
+[4..size-5] - dane
 [size-4..size-1] - crc32
 
+Ograniczenia:
+Mo¿na zatem zdefiniowaæ 128 typów struktur (je¶li bêdzie potrzeba, rozszerzy siê na 2 bajty, ale w±tpie). Pierwszy bit to endianizm: 0-little, 1-big (dla tego tylko 128 typów struktur).
+Maksymalna liczba zmiennych w strukturze to 16, ale te¿ mo¿na rozszerzyæ (byæ mo¿e dobrze by by³o zrobiæ to jako¶ flexi) albo doprecyzowaæ, ¿e 16 tyczy siê tylko pól opcjonalnych, a zwyk³ych pól mo¿e byæ wiele wiêcej.
+Maksymalny rozmiar pakietu: 2^16 - tego raczej nie przekroczymy, wiêc nie ma siê co martwiæ.
 
-Deserialized data:
 
-Enumerations:
-enum Enumeration
+Zdeserializowane dane:
+struct ExampleStruct
 {
-	ENUM_VAL1,
-	ENUM_VAL2,
+	int32 Val1;
+	boost::optional<double> Val2; // w C# - Nullable, w ansi c te¿ jako¶ trzeba bêdzie to rozwi±zaæ
+	OtherStruct Val3;
+	byte Val4;
+	double Val5;
+};
+
+
+Pliki .hfproto z opisem protoko³u:
+Enumeracje:
+enum SampleEnum
+{
+	ENUM_VAL1
+	ENUM_VAL2
 	ENUM_VAL3
 	...
 	ENUM_VAL256
 }
-Maximum of enum values is 256 (because sizeof(Enum) equals 1)
+Maksymalnie 256 warto¶ci, je¶li bêdzie potrzeba (w co w±tpie), mo¿na rozszerzyæ rozmiar enuma na 2 bajty
 
-Structures description:
-struct Structure
+Struktury:
+struct ExampleStruct
 {
-	int32 Val1;
+	int Val1
 	double? Val2;
-	Enumeration Val3;
+	OtherStruct Val3;
 	byte Val4;
 	double Val5;
-}
+};
+'?' oznacza warto¶æ opcjonaln±
+Struktura OtherStruct musi byæ zdefiniowana przed ExampleStruct.
 
-'?' means optional value. 
 
-Structure inside structure:
-struct Structure2
+Przyk³adowy kod w C++:
+
+byte data[] = {...};
+
+// fill 'data' array here
+
+try
 {
-	double Val1;
-	Structure Val2;
-	byte Val3;
+	std::shared_ptr<Frame> frame(FrameBuilder::build_frame(data));
+	new_frame_received(frame);
+}
+catch(const std::exception& ex)
+{
+	cerr << "somethings wrong with your data;/ can't parse it!" << endl;
 }
 
-Structure must be defined before Structure2.
+// ... far far away
+void on_new_telemetry_received(std::shared_ptr<Frame> frame)
+{
+	if (frame->get_type() != FrameTypes::TELEMETRY)
+	   return;
+	   
+	std::shared_ptr<TelemetryFrame> tele_frame = std::static_pointer_cast<TelemetryFrame>(frame);
+						     //alternative:  = frame->asTelemetryFrame();
 
+	// do sth. with data
+	cout << tele_frame->speed << endl;
+}
+	
