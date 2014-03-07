@@ -10,7 +10,7 @@ namespace HighFlyers.Protocol
         Telemetry = 0
     }
 
-    abstract class Frame
+    public abstract class Frame
     {
         public abstract int TotalSize { get; }
         protected abstract int FieldCount { get; }

@@ -5,22 +5,43 @@ using System.IO;
 
 namespace HighFlyers.Protocol
 {
-    class FrameParsedArgs : EventArgs
+    public class FrameParsedArgs : EventArgs
     {
-        public Frame ParsedFrame { get; set; }
+        public FrameParsedArgs(Frame frame)
+        {
+            ParsedFrame = frame;
+        }
+
+        public Frame ParsedFrame { get; private set; }
     }
 
-    class Parser
+    public class Parser
     {
-        private const byte EndFrame = 12;
-        private const byte Sentinel = 13;
-        private const int MaxLength = 2048;
+        public static byte EndFrame
+        {
+            get { return 12; }
+        }
+        public static byte Sentinel
+        {
+            get { return 13; }
+        }
+        public static uint MaxLength
+        {
+            get { return 2048; }
+        }
+
         private bool prevSentinel;
 
-        readonly List<byte> bytes = new List<byte>();
+        private readonly List<byte> bytes = new List<byte>();
 
-        internal delegate void FrameParsedHandler(object sender, FrameParsedArgs args);
+        public delegate void FrameParsedHandler(object sender, FrameParsedArgs args);
         public event FrameParsedHandler FrameParsed;
+
+        protected void OnFrameParsed(FrameParsedArgs args)
+        {
+            if (FrameParsed != null) 
+                FrameParsed(this, args);
+        }
 
         public void AppendBytes(byte[] data)
         {
@@ -36,6 +57,7 @@ namespace HighFlyers.Protocol
                     bytes.Add(b);
                 else
                     throw new InvalidDataException("Unexpected token " + b);
+                prevSentinel = false;
             }
             else if (b == Sentinel)
                 prevSentinel = true;
@@ -53,7 +75,9 @@ namespace HighFlyers.Protocol
 
         private void ParseFrame()
         {
+            Frame frame = FrameBuilder.BuildFrame(bytes);
 
+            OnFrameParsed(new FrameParsedArgs(frame));
         }
     }
 }
