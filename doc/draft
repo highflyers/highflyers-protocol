@@ -55,7 +55,7 @@ byte data[] = {...};
 
 try
 {
-	std::shared_ptr<Frame> frame(FrameBuilder.build_frame(data));
+	std::shared_ptr<Frame> frame(FrameBuilder::build_frame(data));
 	new_frame_received(frame);
 }
 catch(const std::exception& ex)
@@ -69,7 +69,8 @@ void on_new_telemetry_received(std::shared_ptr<Frame> frame)
 	if (frame->get_type() != FrameTypes::TELEMETRY)
 	   return;
 	   
-	std::shared_ptr<TelemetryFrame> tele_frame = std::static_pointer_cast<TelemetryFrame>(Frame);
+	std::shared_ptr<TelemetryFrame> tele_frame = std::static_pointer_cast<TelemetryFrame>(frame);
+						     //alternative:  = frame->asTelemetryFrame();
 
 	// do sth. with data
 	cout << tele_frame->speed << endl;
