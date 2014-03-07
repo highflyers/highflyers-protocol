@@ -22,7 +22,7 @@ namespace HighFlyers.Protocol.Generator.Types
                 if (words.Length != 1)
                     throw new Exception("Expected one word in line!");
 
-                yield return words[0];
+                yield return words[0] + ",";
             }
         }
     }

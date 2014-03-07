@@ -16,7 +16,7 @@ namespace HighFlyers.Protocol.Generator.Types
         protected abstract string GenerateHeader();
         protected abstract IEnumerable<string> GenerateBody();
 
-        private string GenerateBottom()
+        private static string GenerateBottom()
         {
             return "}";
         }
@@ -24,9 +24,9 @@ namespace HighFlyers.Protocol.Generator.Types
         public IEnumerable<string> GenerateClass()
         {
             yield return GenerateHeader();
-
+    
             foreach (var line in GenerateBody())
-                yield return line;
+                yield return "\t" + line;
 
             yield return GenerateBottom();
         }

@@ -59,6 +59,9 @@ namespace HighFlyers.Protocol.Generator
 
         private void GenerateHeaders()
         {
+            builder.AppendLine("// GENERATED CODE! DON'T MODIFY IT!");
+            builder.AppendLine("using System;");
+            builder.AppendLine("using System.Collections.Generic;");
             builder.AppendLine("namespace HighFlyers.Protocol.Frames");
             builder.AppendLine("{");
         }
@@ -83,7 +86,7 @@ namespace HighFlyers.Protocol.Generator
                 string[] words in
                     data.Select(
                         line => System.Text.RegularExpressions.Regex.Replace(line.Trim(), @"\s+", " ").Split(' '))
-                        .Where(words => words.Length != 0))
+                        .Where(words => words.Length != 0 && !string.IsNullOrEmpty(words[0])))
             {
                 if (words.Length == 2 && (words[0] == "struct" || words[0] == "enum"))
                 {
