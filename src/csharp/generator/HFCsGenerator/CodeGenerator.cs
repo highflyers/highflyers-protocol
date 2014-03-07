@@ -1,33 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using HighFlyers.Protocol.Generator.Types;
 
 namespace HighFlyers.Protocol.Generator
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.WriteLine("Usage: " + Process.GetCurrentProcess().ProcessName + " <input hfproto file> <output cs file>");
-                return;
-            }
-
-            try
-            {
-                var generator = new CodeGenerator(args[0], args[1]);
-                generator.Generate();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Cannot generate cs file: " + ex.Message);
-            }
-        }
-    }
-
     internal class CodeGenerator
     {
         enum CurrentType
@@ -35,84 +13,6 @@ namespace HighFlyers.Protocol.Generator
             None,
             Structure,
             Enumeration
-        }
-
-        abstract class ObjectType
-        {
-            protected readonly string[][] Input;
-            protected readonly string name;
-
-            protected ObjectType(string name, string[][] input)
-            {
-                Input = input;
-            }
-
-            protected abstract string GenerateHeader();
-            protected abstract IEnumerable<string> GenerateBody();
-            
-            private string GenerateBottom()
-            {
-                return "}";
-            }
-
-            public IEnumerable<string> GenerateClass()
-            {
-                yield return GenerateHeader();
-
-                foreach(var line in GenerateBody())
-                    yield return line;
-
-                yield return GenerateBottom();
-            }
-        }
-
-        class Structure : ObjectType
-        {
-            public Structure(string name, string[][] input)
-                : base(name, input)
-            {
-            }
-
-            protected override string GenerateHeader()
-            {
-                return "struct " + name;
-            }
-
-            protected override IEnumerable<string> GenerateBody()
-            {
-                foreach (var words in Input)
-                {
-                    if (words.Length != 2)
-                        throw new Exception("Expected two words in line!");
-
-                    // todo check types (words[0])
-                    yield return string.Join(" ", words) + ";";
-                }
-            }
-        }
-
-        class Enumeration : ObjectType
-        {
-            public Enumeration(string name, string[][] input)
-                : base(name, input)
-            {
-            }
-
-            protected override string GenerateHeader()
-            {
-                return "enum " + name;
-            }
-
-            protected override IEnumerable<string> GenerateBody()
-            {
-                foreach (var words in Input)
-                {
-                    if (words.Length != 1)
-                        throw new Exception("Expected one word in line!");
-
-                    yield return words[0];
-                }
-            }
         }
 
         readonly List<ObjectType> objectsTypes = new List<ObjectType>();
@@ -124,7 +24,7 @@ namespace HighFlyers.Protocol.Generator
         private bool wasStartBracket;
         readonly StringBuilder builder = new StringBuilder();
         private string currentName;
-        
+
         public CodeGenerator(string inputFileName, string outputFileName)
         {
             this.inputFileName = inputFileName;
@@ -147,7 +47,7 @@ namespace HighFlyers.Protocol.Generator
 
         private void ReadFromFile()
         {
-            data = System.IO.File.ReadAllLines(inputFileName);            
+            data = System.IO.File.ReadAllLines(inputFileName);
         }
 
         private void SaveToFile()
