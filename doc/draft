@@ -1,0 +1,43 @@
+Serialized data:
+[0] - struct type (should it be extended to a 2 bytes?)
+[1] - size of entire packet (including struct type and this size. Maybe 2 bytes?)
+[2..3] - field flags
+[4..size-5] - data
+[size-4..size-1] - crc32
+
+
+Deserialized data:
+
+Enumerations:
+enum Enumeration
+{
+	ENUM_VAL1,
+	ENUM_VAL2,
+	ENUM_VAL3
+	...
+	ENUM_VAL256
+}
+Maximum of enum values is 256 (because sizeof(Enum) equals 1)
+
+Structures description:
+struct Structure
+{
+	int32 Val1;
+	double? Val2;
+	Enumeration Val3;
+	byte Val4;
+	double Val5;
+}
+
+'?' means optional value. 
+
+Structure inside structure:
+struct Structure2
+{
+	double Val1;
+	Structure Val2;
+	byte Val3;
+}
+
+Structure must be defined before Structure2.
+
