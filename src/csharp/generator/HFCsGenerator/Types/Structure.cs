@@ -90,7 +90,6 @@ namespace HighFlyers.Protocol.Generator.Types
                                        "an optional value!\");");
             }
 
-            builder.AppendLine("\t\t\tCheckCrcSum(data[iterator]);");
             builder.AppendLine("\t\t}");
 
             return builder.ToString();

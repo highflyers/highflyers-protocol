@@ -41,11 +41,15 @@
   <ItemGroup>
     <Compile Include="Frame.cs" />
     <Compile Include="FrameBuilder.cs" />
-    <Compile Include="Frames\TelemetryFrame.cs" />
+    <Compile Include="Frames.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)\generator\HFCsGenerator\bin\$(ConfigurationName)\HFCsGenerator.exe D:\sample.txt $(ProjectDir)\Frames.cs</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
