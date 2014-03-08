@@ -7,15 +7,16 @@ namespace HighFlyers.Protocol.Generator
     {
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 3)
             {
-                Console.WriteLine("Usage: " + Process.GetCurrentProcess().ProcessName + " <input hfproto file> <output cs file>");
+                Console.WriteLine("Usage: " + Process.GetCurrentProcess().ProcessName +
+                                  " <input hfproto file> <output cs file> <output builder file>");
                 return;
             }
 
             try
             {
-                var generator = new CodeGenerator(args[0], args[1]);
+                var generator = new CodeGenerator(args[0], args[1], args[2]);
                 generator.Generate();
             }
             catch (Exception ex)

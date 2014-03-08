@@ -20,15 +20,17 @@ namespace HighFlyers.Protocol.Generator
         private readonly List<string[]> currentCollector = new List<string[]>();
         private readonly string outputFileName;
         private readonly string inputFileName;
+        private readonly string builderFileName;
         private CurrentType currType = CurrentType.None;
         private bool wasStartBracket;
         readonly StringBuilder builder = new StringBuilder();
         private string currentName;
 
-        public CodeGenerator(string inputFileName, string outputFileName)
+        public CodeGenerator(string inputFileName, string outputFileName, string builderFileName)
         {
             this.inputFileName = inputFileName;
             this.outputFileName = outputFileName;
+            this.builderFileName = builderFileName;
         }
 
         public void Generate()
@@ -44,6 +46,8 @@ namespace HighFlyers.Protocol.Generator
             GenerateBottom();
 
             SaveToFile();
+
+            new FrameBuilderGenerator(builderFileName).GenerateBuilder(objectsTypes);
         }
 
         private void GenerateFrameTypesEnum()

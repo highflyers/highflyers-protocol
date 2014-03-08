@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Frame.cs" />
+    <Compile Include="FrameBuilder.Build.cs" />
+    <Compile Include="xxx.cs" />
     <Compile Include="FrameBuilder.cs" />
     <Compile Include="Frames.cs" />
     <Compile Include="Parser.cs" />
@@ -48,7 +50,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)\generator\HFCsGenerator\bin\$(ConfigurationName)\HFCsGenerator.exe D:\sample.txt $(ProjectDir)\Frames.cs</PreBuildEvent>
+    <PreBuildEvent>$(ProjectDir)\generator\HFCsGenerator\bin\$(ConfigurationName)\HFCsGenerator.exe D:\sample.txt $(ProjectDir)\Frames.cs $(ProjectDir)\FrameBuilder.Build.cs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
