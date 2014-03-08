@@ -37,8 +37,8 @@ namespace HighFlyers.Protocol.Generator
             ReadFromFile();
             PrepareData();
 
-            SaveToFile(framesFileName, new FrameBuilderGenerator().GenerateCode(objectsTypes));
-            SaveToFile(builderFileName, new FramesGenerator().GenerateCode(objectsTypes));
+            SaveToFile(builderFileName, new FrameBuilderGenerator().GenerateCode(objectsTypes));
+            SaveToFile(framesFileName, new FramesGenerator().GenerateCode(objectsTypes));
         }
 
         private void ReadFromFile()

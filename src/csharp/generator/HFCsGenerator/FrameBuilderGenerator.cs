@@ -24,6 +24,7 @@ namespace HighFlyers.Protocol.Generator
 
         private void GenerateHeader()
         {
+            lines.AppendLine("// GENERATED CODE! DON'T MODIFY IT!");
             lines.AppendLine("using System.Collections.Generic;");
             lines.AppendLine("using System.IO;");
             lines.AppendLine("using HighFlyers.Protocol.Frames;");
