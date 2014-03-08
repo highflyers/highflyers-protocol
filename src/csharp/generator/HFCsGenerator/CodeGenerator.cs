@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using HighFlyers.Protocol.Generator.Types;
 
 namespace HighFlyers.Protocol.Generator
@@ -80,27 +79,32 @@ namespace HighFlyers.Protocol.Generator
                 }
                 else if (words.Length == 1 && words[0] == "}")
                 {
-                    if (!wasStartBracket || currType == CurrentType.None)
-                        throw new Exception("Unexpected '}' token");
-
-                    switch (currType)
-                    {
-                        case CurrentType.Structure:
-                            objectsTypes.Add(new Structure(currentName, currentCollector.ToArray()));
-                            break;
-                        case CurrentType.Enumeration:
-                            objectsTypes.Add(new Enumeration(currentName, currentCollector.ToArray()));
-                            break;
-                    }
-
-                    wasStartBracket = false;
-                    currType = CurrentType.None;
+                    AddNewObjectType();
                 }
                 else if (!wasStartBracket)
                     throw new Exception("Unexpected value " + words[0]);
                 else
                     currentCollector.Add(words);
             }
+        }
+
+        void AddNewObjectType()
+        {
+            if (!wasStartBracket || currType == CurrentType.None)
+                throw new Exception("Unexpected '}' token");
+            
+            switch (currType)
+            {
+                case CurrentType.Structure:
+                    objectsTypes.Add(new Structure(currentName, currentCollector.ToArray()));
+                    break;
+                case CurrentType.Enumeration:
+                    objectsTypes.Add(new Enumeration(currentName, currentCollector.ToArray()));
+                    break;
+            }
+
+            wasStartBracket = false;
+            currType = CurrentType.None;
         }
     }
 }
