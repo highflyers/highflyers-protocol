@@ -74,6 +74,7 @@ namespace HighFlyers.Protocol.Generator
             builder.AppendLine("// GENERATED CODE! DON'T MODIFY IT!");
             builder.AppendLine("using System;");
             builder.AppendLine("using System.Collections.Generic;");
+            builder.AppendLine("using System.Linq;");
             builder.AppendLine("namespace HighFlyers.Protocol.Frames");
             builder.AppendLine("{");
         }

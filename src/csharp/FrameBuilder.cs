@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using HighFlyers.Protocol.Frames;
 
 namespace HighFlyers.Protocol
@@ -13,6 +14,7 @@ namespace HighFlyers.Protocol
     public abstract class Frame
     {
         protected abstract int FieldCount { get; }
+        public abstract int CurrentSize { get; }
 
         protected void CheckCrcSum(UInt32 crc)
         {
@@ -22,11 +24,6 @@ namespace HighFlyers.Protocol
 
         protected bool[] PreParseData(byte[] data)
         {
-            UInt16 size = BitConverter.ToUInt16(data, 1);
-
-            if (size != data.Length)
-                throw new InvalidDataException("Invalid data length");
-
             UInt16 fieldFlags = BitConverter.ToUInt16(data, 3);
             var fields = new bool[FieldCount];
 
@@ -42,20 +39,24 @@ namespace HighFlyers.Protocol
 
     class FrameBuilder
     {
-        public static Frame BuildFrame(List<byte> data)
+        public static Frame BuildFrame(List<byte> bytes)
         {
             Frame frame;
+            UInt16 size = BitConverter.ToUInt16(bytes.ToArray(), 1);
 
-            switch ((FrameType)data[0])
+            if (size != bytes.Count)
+                throw new InvalidDataException("Invalid data length");
+
+            switch ((FrameTypes)bytes[0])
             {
-                case FrameType.Telemetry:
-                    frame = new TelemetryFrame();
+                case FrameTypes.Message:
+                    frame = new Message();
                     break;
                 default:
                     throw new InvalidDataException("Unexpected frame type");
             }
 
-            frame.Parse(data);
+            frame.Parse(bytes.GetRange(3, bytes.Count - 3));
             return frame;
         }
     }
