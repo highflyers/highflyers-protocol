@@ -40,9 +40,21 @@ namespace HighFlyers.Protocol.Generator
 
             GenerateHeaders();
             GenerateObjectTypes();
+            GenerateFrameTypesEnum();
             GenerateBottom();
 
             SaveToFile();
+        }
+
+        private void GenerateFrameTypesEnum()
+        {
+            builder.AppendLine("\tenum FrameTypes");
+            builder.AppendLine("\t{");
+
+            foreach (Structure objType in objectsTypes.OfType<Structure>())
+                builder.AppendLine("\t\t" + objType.Name + ",");
+
+            builder.AppendLine("\t}");
         }
 
         private void ReadFromFile()

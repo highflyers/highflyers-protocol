@@ -12,7 +12,7 @@ namespace HighFlyers.Protocol.Generator.Types
 
         protected override string GenerateHeader()
         {
-            return "enum " + Name;
+            return "enum " + Name + "\n\t{  ";
         }
 
         protected override IEnumerable<string> GenerateBody()

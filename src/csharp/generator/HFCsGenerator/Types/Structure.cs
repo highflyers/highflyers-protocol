@@ -59,7 +59,7 @@ namespace HighFlyers.Protocol.Generator.Types
             {
                 builder.AppendLine("\t\t\tif (fields[" + i++ + "])");
                 builder.AppendLine("\t\t\t{");
-                builder.AppendLine("\t\t\t" + line[1] + " = Utils.ConvertFromBytes(data, iterator + 5)");
+                builder.AppendLine("\t\t\t\t" + line[1] + " = Utils.ConvertFromBytes(data, iterator + 5)");
                 builder.AppendLine("\t\t\t\titerator += Utils.GetSize(" + line[1].Trim() +
                                    (line[0].EndsWith("?") ? ".GetValueOrDefault()" : "") + ");");
                 builder.AppendLine("\t\t\t}");

@@ -5,7 +5,7 @@ namespace HighFlyers.Protocol.Generator.Types
     abstract class ObjectType
     {
         protected readonly string[][] Input;
-        protected readonly string Name;
+        public string Name { get; private set; }
 
         protected ObjectType(string name, string[][] input)
         {

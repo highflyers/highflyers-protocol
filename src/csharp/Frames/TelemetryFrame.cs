@@ -11,7 +11,7 @@ namespace HighFlyers.Protocol.Frames
         public int? DummyIntData = null;
         public double? WindSpeed = null;
 
-        public override int TotalSize
+        public int TotalSize
         {
             get { return sizeof(double) + sizeof(int) + sizeof(double); }
         }

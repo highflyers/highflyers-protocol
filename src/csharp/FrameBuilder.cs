@@ -12,12 +12,11 @@ namespace HighFlyers.Protocol
 
     public abstract class Frame
     {
-        public abstract int TotalSize { get; }
         protected abstract int FieldCount { get; }
 
-        protected void CheckCrcSum(byte crc)
+        protected void CheckCrcSum(UInt32 crc)
         {
-            if (crc != 12)
+            if (crc != 12) // TODO fuck yeah, hardcoded crc!
                 throw new InvalidDataException("Invalid crc sum!");
         }
 
