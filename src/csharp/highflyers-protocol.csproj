@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Frame.cs" />
     <Compile Include="FrameBuilder.Build.cs" />
-    <Compile Include="xxx.cs" />
     <Compile Include="FrameBuilder.cs" />
     <Compile Include="Frames.cs" />
     <Compile Include="Parser.cs" />

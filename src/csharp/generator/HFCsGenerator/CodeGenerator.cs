@@ -18,47 +18,28 @@ namespace HighFlyers.Protocol.Generator
         readonly List<ObjectType> objectsTypes = new List<ObjectType>();
         private string[] data;
         private readonly List<string[]> currentCollector = new List<string[]>();
-        private readonly string outputFileName;
+        private readonly string framesFileName;
         private readonly string inputFileName;
         private readonly string builderFileName;
         private CurrentType currType = CurrentType.None;
         private bool wasStartBracket;
-        readonly StringBuilder builder = new StringBuilder();
+        
         private string currentName;
 
-        public CodeGenerator(string inputFileName, string outputFileName, string builderFileName)
+        public CodeGenerator(string inputFileName, string framesFileName, string builderFileName)
         {
             this.inputFileName = inputFileName;
-            this.outputFileName = outputFileName;
+            this.framesFileName = framesFileName;
             this.builderFileName = builderFileName;
         }
 
         public void Generate()
         {
-            builder.Clear();
-
             ReadFromFile();
             PrepareData();
 
-            GenerateHeaders();
-            GenerateObjectTypes();
-            GenerateFrameTypesEnum();
-            GenerateBottom();
-
-            SaveToFile();
-
-            new FrameBuilderGenerator(builderFileName).GenerateBuilder(objectsTypes);
-        }
-
-        private void GenerateFrameTypesEnum()
-        {
-            builder.AppendLine("\tenum FrameTypes");
-            builder.AppendLine("\t{");
-
-            foreach (Structure objType in objectsTypes.OfType<Structure>())
-                builder.AppendLine("\t\t" + objType.Name + ",");
-
-            builder.AppendLine("\t}");
+            SaveToFile(framesFileName, new FrameBuilderGenerator().GenerateCode(objectsTypes));
+            SaveToFile(builderFileName, new FramesGenerator().GenerateCode(objectsTypes));
         }
 
         private void ReadFromFile()
@@ -66,35 +47,11 @@ namespace HighFlyers.Protocol.Generator
             data = System.IO.File.ReadAllLines(inputFileName);
         }
 
-        private void SaveToFile()
+        private void SaveToFile(string fileName, string content)
         {
-            var file = new System.IO.StreamWriter(outputFileName);
-            file.WriteLine(builder.ToString());
+            var file = new System.IO.StreamWriter(fileName);
+            file.WriteLine(content);
             file.Close();
-        }
-
-        private void GenerateHeaders()
-        {
-            builder.AppendLine("// GENERATED CODE! DON'T MODIFY IT!");
-            builder.AppendLine("using System;");
-            builder.AppendLine("using System.Collections.Generic;");
-            builder.AppendLine("using System.Linq;");
-            builder.AppendLine("namespace HighFlyers.Protocol.Frames");
-            builder.AppendLine("{");
-        }
-
-        private void GenerateBottom()
-        {
-            builder.AppendLine("}");
-        }
-
-        private void GenerateObjectTypes()
-        {
-            foreach (var line in objectsTypes.SelectMany(objType => objType.GenerateClass()))
-            {
-                builder.Append("\t");
-                builder.AppendLine(line);
-            }
         }
 
         private void PrepareData()

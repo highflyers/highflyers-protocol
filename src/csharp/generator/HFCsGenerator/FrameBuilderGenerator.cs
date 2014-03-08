@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using HighFlyers.Protocol.Generator.Types;
@@ -8,25 +7,19 @@ namespace HighFlyers.Protocol.Generator
 {
     internal class FrameBuilderGenerator
     {
-        private StringBuilder lines;
+        private readonly StringBuilder lines = new StringBuilder();
         List<ObjectType> types;
-        private readonly string fileName;
-
-        public FrameBuilderGenerator(string fileName)
+        
+        public string GenerateCode(List<ObjectType> definedTypes)
         {
-            this.fileName = fileName;
-        }
-
-        public void GenerateBuilder(List<ObjectType> definedTypes)
-        {
-            lines = new StringBuilder();
+            lines.Clear();
             types = definedTypes;
 
             GenerateHeader();
             GenerateBuildMethod();
             GenerateBottom();
 
-            SaveToFile();
+            return lines.ToString();
         }
 
         private void GenerateHeader()
@@ -64,13 +57,6 @@ namespace HighFlyers.Protocol.Generator
             lines.AppendLine("\t\t\tframe.Parse(bytes.GetRange(3, bytes.Count - 3));");
             lines.AppendLine("\t\t\treturn frame;");
             lines.AppendLine("\t\t}");
-        }
-
-        private void SaveToFile()
-        {
-            var file = new StreamWriter(fileName);
-            file.WriteLine(lines.ToString());
-            file.Close();
         }
     }
 }
