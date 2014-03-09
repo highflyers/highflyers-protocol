@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{180F8274-24C9-417E-9120-C17A0CBEF180}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{EBB700AD-54C4-4AEE-90B4-A6C074617999}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HighFlyers.Protocol.Generator</RootNamespace>
-    <AssemblyName>HFCsGenerator</AssemblyName>
+    <RootNamespace>HighFlyers.Protocol</RootNamespace>
+    <AssemblyName>highflyers-protocol</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,19 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGenerator.cs" />
-    <Compile Include="FrameBuilderGenerator.cs" />
-    <Compile Include="FramesGenerator.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="FrameBuilder.Build.cs" />
+    <Compile Include="FrameBuilder.cs" />
+    <Compile Include="Frames.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Enumeration.cs" />
-    <Compile Include="Types\ObjectType.cs" />
-    <Compile Include="Types\Structure.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)highflyers-protocol-generator\bin\$(ConfigurationName)\HFCsGenerator.exe D:\sample.txt $(ProjectDir)Frames.cs $(ProjectDir)FrameBuilder.Build.cs</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
