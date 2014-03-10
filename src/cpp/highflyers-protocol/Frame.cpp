@@ -11,9 +11,19 @@
 using namespace HighFlyers::Protocol;
 using namespace std;
 
-bool Frame::PreParseData(const vector<byte>& data)
+Frame::Frame(size_t field_count)
+	: field_count(field_count)
+{}
+
+vector<bool> Frame::PreParseData(const vector<byte>& data)
 {
-	uint16
+	vector<bool> fields;
+	uint16 field_flag = BitConverter(Endianes::BIG_ENDIANA).from_bytes<uint16>(data, 3);
+
+	for (size_t i = 0; i < field_count; i++)
+		fields[i] = (field_flag & (1 >> i)) != 0;
+
+    return fields;
 }
 
 

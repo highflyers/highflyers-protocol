@@ -9,8 +9,9 @@
 #ifndef HIGHFLYERS_PROTOCOL_H_
 #define HIGHFLYERS_PROTOCOL_H_
 
-
-
-
+#include "highflyers-protocol/BitConverter.h"
+#include "highflyers-protocol/Frame.h"
+#include "highflyers-protocol/FrameBuilder.h"
+#include "highflyers-protocol/Parser.h"
 
 #endif /* HIGHFLYERS_PROTOCOL_H_ */

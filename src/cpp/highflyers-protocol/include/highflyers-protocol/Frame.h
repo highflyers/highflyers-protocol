@@ -9,23 +9,26 @@
 #ifndef FRAME_H_
 #define FRAME_H_
 
+#include "BitConverter.h"
 #include <vector>
 
 namespace HighFlyers {
 namespace Protocol {
 
-typedef unsigned char byte;
-typedef unsigned short uint16;
+
 
 class Frame
 {
 protected:
-	bool PreParseData(const std::vector<byte>& data);
+	size_t field_count;
+	std::vector<bool> PreParseData(const std::vector<byte>& data);
 
 public:
+	Frame(size_t field_count);
 	virtual ~Frame() {}
 
-	virtual void Parse(const std::vector<byte>& data) = 0;
+	virtual void parse(const std::vector<byte>& data) = 0;
+	virtual size_t get_current_size() = 0;
 };
 
 }
