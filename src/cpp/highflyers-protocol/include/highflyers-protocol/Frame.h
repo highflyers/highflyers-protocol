@@ -22,6 +22,7 @@ class Frame
 protected:
 	size_t field_count;
 	std::vector<bool> PreParseData(const std::vector<byte>& data);
+	BitConverter converter;
 
 public:
 	Frame(size_t field_count);

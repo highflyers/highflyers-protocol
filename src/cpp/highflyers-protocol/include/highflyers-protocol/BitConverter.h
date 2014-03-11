@@ -31,6 +31,7 @@ class BitConverter
 {
 private:
 	Endianes endianes;
+
 public:
 	BitConverter(Endianes endianes);
 
@@ -38,18 +39,19 @@ public:
 	R from_bytes(const std::vector<byte>& data, size_t start_index)	
 	{
 		R value = 0;
+
 		if (data.size() < start_index + sizeof(R) - 1)
 			throw std::out_of_range("Cannot convert data to uint16");
 
 		if (endianes == Endianes::BIG_ENDIANA)
 			for (size_t i = 0; i < sizeof(R); i++)
-				value &= data[i + start_index] << (8 * (sizeof(R) - start_index - 1));
+				*((byte*)(&value) + i) = data[start_index + i];
 		else if (endianes == Endianes::LITTLE_ENDIANA)
-			for (size_t i = 0; i < sizeof(R); i++)
-				value &= data[i + start_index] << (8 * start_index);
+			for (size_t i = 0; i < 8; i++)
+				*((byte*)(&value) + sizeof(R) - 1 - i) = data[start_index + i];
 		else
 			throw std::runtime_error("Unsupported endianes");
-		
+	
 		return value;
 	}
 };

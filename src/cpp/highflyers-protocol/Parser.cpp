@@ -48,7 +48,7 @@ void Parser::new_frame_received(std::shared_ptr<Frame> frame)
 
 void Parser::parse_frame()
 {
-	std::shared_ptr<Frame> frame(FrameBuilder::build_frame(bytes));
+//	std::shared_ptr<Frame> frame(FrameBuilder::build_frame(bytes));
 	
-	new_frame_received(frame);
+//	new_frame_received(frame);
 }

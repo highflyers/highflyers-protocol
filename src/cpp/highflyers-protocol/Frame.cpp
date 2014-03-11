@@ -12,7 +12,8 @@ using namespace HighFlyers::Protocol;
 using namespace std;
 
 Frame::Frame(size_t field_count)
-	: field_count(field_count)
+	: field_count(field_count),
+	converter(Endianes::BIG_ENDIANA)
 {}
 
 vector<bool> Frame::PreParseData(const vector<byte>& data)
