@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\highflyers-protocol\BitConverter.h">
       <Filter>Header Files\include\highflyers-protocol</Filter>
     </ClInclude>
