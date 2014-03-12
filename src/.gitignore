@@ -111,3 +111,7 @@ UpgradeLog*.XML
 Frames.cs
 FrameBuilder.Build.cs
 
+Frames.cpp
+Frames.h
+
+

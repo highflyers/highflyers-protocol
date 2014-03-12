@@ -12,6 +12,8 @@
 #include "highflyers-protocol/BitConverter.h"
 #include "highflyers-protocol/Frame.h"
 #include "highflyers-protocol/FrameBuilder.h"
+#include "highflyers-protocol/Frames.h"
+#include "highflyers-protocol/Optional.h"
 #include "highflyers-protocol/Parser.h"
 
 #endif /* HIGHFLYERS_PROTOCOL_H_ */
