@@ -15,8 +15,6 @@
 namespace HighFlyers {
 namespace Protocol {
 
-
-
 class Frame
 {
 protected:
@@ -25,9 +23,9 @@ protected:
 	BitConverter converter;
 
 public:
-	Frame(size_t field_count);
+	Frame() : converter(Endianes::BIG_ENDIANA){}
 	virtual ~Frame() {}
-
+	virtual size_t get_field_count() = 0;
 	virtual void parse(const std::vector<byte>& data) = 0;
 	virtual size_t get_current_size() = 0;
 };
