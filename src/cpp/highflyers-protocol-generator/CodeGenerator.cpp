@@ -1,4 +1,6 @@
 #include "CodeGenerator.h"
+#include "FrameBuilderGenerator.h"
+#include "FramesGenerator.h"
 
 using namespace HighFlyers::Protocol;
 using namespace std;
@@ -16,8 +18,8 @@ void CodeGenerator::generate()
 	read_from_file();
     prepare_data();
 
-//    save_to_file(builder_file_name, new FrameBuilderGenerator().GenerateCode(objectsTypes));
-//    save_to_file(builder_file_name, new FramesGenerator().GenerateCode(objectsTypes));
+    save_to_file(builder_file_name, FrameBuilderGenerator().GenerateCode(objects_types));
+    save_to_file(builder_file_name, FramesGenerator().GenerateCode(objects_types));
 }
 
 void CodeGenerator::read_from_file()

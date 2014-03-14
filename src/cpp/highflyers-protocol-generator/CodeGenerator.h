@@ -4,6 +4,7 @@
 #include "ObjectType.h"
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace HighFlyers {
 namespace Protocol {
@@ -24,7 +25,7 @@ private:
 	std::string current_name;
 	CurrentType curr_type;
 	bool was_start_bracket;
-	std::vector<ObjectType> objects_types;
+	std::vector<std::shared_ptr<ObjectType>> objects_types;
     std::vector<std::string> data;
 	std::vector<std::vector<std::string>> current_collector;;
         
