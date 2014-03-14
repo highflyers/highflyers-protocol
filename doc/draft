@@ -1,13 +1,13 @@
 Zserializowane dane:
 [0] - typ struktury
-[1..2] - rozmiar struktury pakietu(³±cznie z typem struktury i rozmiarem)
-[3..4] - flaga dostêpno¶ci zmiennych
-[4..size-5] - dane
-[size-4..size-1] - crc32
+[1..2] - flaga dostêpnoœci zmiennych
+[3..size-6] - dane (size - rozmiar pakietu, trzeba wyliczyæ rêcznie na podstawie koñca ramki)
+[size-5..size-2] - crc32
+[size-1] - znak koñca ramki
 
 Ograniczenia:
-Mo¿na zatem zdefiniowaæ 128 typów struktur (je¶li bêdzie potrzeba, rozszerzy siê na 2 bajty, ale w±tpie). Pierwszy bit to endianizm: 0-little, 1-big (dla tego tylko 128 typów struktur).
-Maksymalna liczba zmiennych w strukturze to 16, ale te¿ mo¿na rozszerzyæ (byæ mo¿e dobrze by by³o zrobiæ to jako¶ flexi) albo doprecyzowaæ, ¿e 16 tyczy siê tylko pól opcjonalnych, a zwyk³ych pól mo¿e byæ wiele wiêcej.
+Mo¿na zatem zdefiniowaæ 128 typów struktur (jeœli bêdzie potrzeba, rozszerzy siê na 2 bajty, ale w¹tpie). Pierwszy bit to endianizm: 0-little, 1-big (dla tego tylko 128 typów struktur).
+Maksymalna liczba zmiennych w strukturze to 16, ale te¿ mo¿na rozszerzyæ (byæ mo¿e dobrze by by³o zrobiæ to jakoœ flexi) albo doprecyzowaæ, ¿e 16 tyczy siê tylko pól opcjonalnych, a zwyk³ych pól mo¿e byæ wiele wiêcej.
 Maksymalny rozmiar pakietu: 2^16 - tego raczej nie przekroczymy, wiêc nie ma siê co martwiæ.
 
 
@@ -15,7 +15,7 @@ Zdeserializowane dane:
 struct ExampleStruct
 {
 	int32 Val1;
-	boost::optional<double> Val2; // w C# - Nullable, w ansi c te¿ jako¶ trzeba bêdzie to rozwi±zaæ
+	boost::optional<double> Val2; // w C# - Nullable, w ansi c te¿ jakoœ trzeba bêdzie to rozwi¹zaæ
 	OtherStruct Val3;
 	byte Val4;
 	double Val5;
@@ -32,7 +32,7 @@ enum SampleEnum
 	...
 	ENUM_VAL256
 }
-Maksymalnie 256 warto¶ci, je¶li bêdzie potrzeba (w co w±tpie), mo¿na rozszerzyæ rozmiar enuma na 2 bajty
+Maksymalnie 256 wartoœci, jeœli bêdzie potrzeba (w co w¹tpie), mo¿na rozszerzyæ rozmiar enuma na 2 bajty
 
 Struktury:
 struct ExampleStruct
@@ -43,7 +43,7 @@ struct ExampleStruct
 	byte Val4;
 	double Val5;
 };
-'?' oznacza warto¶æ opcjonaln±
+'?' oznacza wartoœæ opcjonaln¹
 Struktura OtherStruct musi byæ zdefiniowana przed ExampleStruct.
 
 
