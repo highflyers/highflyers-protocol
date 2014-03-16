@@ -33,6 +33,9 @@ private:
     void save_to_file(const std::string& file_name, const std::string& content);
 	void prepare_data();
 	void add_new_object_type();
+
+protected:
+	void append_line(const std::string& line);
 public:
 	CodeGenerator(const std::string& input_file_name, const std::string& frames_file_name, const std::string& builder_file_name);
 	void generate();

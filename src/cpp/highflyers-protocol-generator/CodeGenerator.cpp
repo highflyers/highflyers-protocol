@@ -3,6 +3,8 @@
 #include "FramesGenerator.h"
 #include "Structure.h"
 #include "Enumeration.h"
+#include <fstream>
+#include <iterator>
 
 using namespace HighFlyers::Protocol;
 using namespace std;
@@ -26,10 +28,15 @@ void CodeGenerator::generate()
 
 void CodeGenerator::read_from_file()
 {
+	ifstream input_file(input_file_name);
+	copy(istream_iterator<string>(input_file), 
+		istream_iterator<string>(), back_inserter(data));
 }
 
 void CodeGenerator::save_to_file(const string& file_name, const string& content)
 {
+	ofstream output(file_name);
+	output << content;
 }
 
 void CodeGenerator::prepare_data()
@@ -53,4 +60,9 @@ void CodeGenerator::add_new_object_type()
 
     was_start_bracket = false;
 	curr_type = CurrentType::NONE;
+}
+
+void CodeGenerator::append_line(const std::string& line)
+{
+
 }
