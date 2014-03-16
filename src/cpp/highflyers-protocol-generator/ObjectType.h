@@ -9,6 +9,7 @@ namespace Protocol {
 
 class ObjectType
 {
+protected:
 	std::vector<std::vector<std::string>> input;
     std::string name;
 

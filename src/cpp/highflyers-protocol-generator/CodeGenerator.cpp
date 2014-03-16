@@ -1,6 +1,8 @@
 #include "CodeGenerator.h"
 #include "FrameBuilderGenerator.h"
 #include "FramesGenerator.h"
+#include "Structure.h"
+#include "Enumeration.h"
 
 using namespace HighFlyers::Protocol;
 using namespace std;
@@ -39,15 +41,15 @@ void CodeGenerator::add_new_object_type()
 	if (!was_start_bracket || curr_type == CurrentType::NONE)
 		throw exception("Unexpected '}' token");
         
-	/*switch (curr_type)
+	switch (curr_type)
     {
 	case CurrentType::STRUCTURE:
-		objects_types.push_back(new Structure(currentName, currentCollector.ToArray()));
+		objects_types.push_back(std::make_shared<Structure>(Structure(current_name, current_collector)));
 		break;
 	case CurrentType::ENUMERATION:
-		objects_types.push_back(new Enumeration(currentName, currentCollector.ToArray()));
+		objects_types.push_back(std::make_shared<Enumeration>(Enumeration(current_name, current_collector)));
 		break;
-	}*/
+	}
 
     was_start_bracket = false;
 	curr_type = CurrentType::NONE;

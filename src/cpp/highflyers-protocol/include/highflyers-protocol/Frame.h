@@ -21,13 +21,15 @@ protected:
 	size_t field_count;
 	std::vector<bool> PreParseData(const std::vector<byte>& data);
 	BitConverter converter;
+	int iterator;
 
 public:
-	Frame() : converter(Endianes::BIG_ENDIANA){}
+	Frame() : converter(Endianes::BIG_ENDIANA), iterator(0) {}
 	virtual ~Frame() {}
 	virtual size_t get_field_count() = 0;
 	virtual void parse(const std::vector<byte>& data) = 0;
-	virtual size_t get_current_size() = 0;
+	size_t get_current_size()
+	{ return iterator; }
 };
 
 }

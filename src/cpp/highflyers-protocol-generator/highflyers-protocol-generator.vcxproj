@@ -79,15 +79,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CodeGenerator.cpp" />
+    <ClCompile Include="Enumeration.cpp" />
     <ClCompile Include="FramesGenerator.cpp" />
     <ClCompile Include="highflyers-protocol-generator.cpp" />
     <ClCompile Include="FrameBuilderGenerator.cpp" />
+    <ClCompile Include="Structure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodeGenerator.h" />
+    <ClInclude Include="Enumeration.h" />
     <ClInclude Include="FrameBuilderGenerator.h" />
     <ClInclude Include="FramesGenerator.h" />
     <ClInclude Include="ObjectType.h" />
+    <ClInclude Include="Structure.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
