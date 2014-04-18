@@ -102,18 +102,20 @@ namespace HighFlyers.Protocol.Generator.Types
         };
         
         string GetConversionMethod(string type, string name)
-        {
-            if (type.EndsWith("?"))
-                type = type.Remove(type.Length - 1);
+		{
+			if (type.EndsWith ("?"))
+				type = type.Remove (type.Length - 1);
             
-            int index = Array.FindIndex(nativeTypes, t => t.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
+			int index = Array.FindIndex (nativeTypes, t => t.IndexOf (type, StringComparison.InvariantCultureIgnoreCase) != -1);
 
-            if (index != -1)
-                return "BitConverter.To" + nativeTypes[index] + "(data, iterator + 2)";
+			if (index == 0)
+				return "data[iterator + 2]";
+			if (index != -1)
+				return "BitConverter.To" + nativeTypes [index] + "(data, iterator + 2)";
 
-            return "new " + type + "(); " + name +
-                   ".Parse(data.ToList().GetRange(iterator + 2, data.Length - iterator - 2))";
-        }
+			return "new " + type + "(); " + name +
+				".Parse(data.ToList().GetRange(iterator + 2, data.Length - iterator - 2))";
+		}
 
         string GetSizeMethod(string type, string name)
         {
