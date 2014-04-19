@@ -51,6 +51,7 @@ namespace HighFlyers.Protocol
 
         private void AppendByte(byte b)
         {
+			bool tmpSentinel = prevSentinel;
             if (prevSentinel)
             {
                 if (b == Sentinel || b == EndFrame)
@@ -64,7 +65,7 @@ namespace HighFlyers.Protocol
             else
                 bytes.Add(b);
 
-            if (b == EndFrame)
+            if (b == EndFrame && !tmpSentinel)
                 ParseFrame();
             else if (MaxLength == bytes.Count)
             {
