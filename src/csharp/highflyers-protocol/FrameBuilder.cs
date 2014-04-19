@@ -8,12 +8,7 @@ namespace HighFlyers.Protocol
     {
         private static void CheckBytes(List<byte> bytes)
         {
-            UInt16 size = BitConverter.ToUInt16(bytes.ToArray(), 1);
-
             CheckCrcSum(BitConverter.ToUInt32(bytes.ToArray(), bytes.Count - 5));
-
-            if (size != bytes.Count)
-                throw new InvalidDataException("Invalid data length");
         }
 
         private static void CheckCrcSum(UInt32 crc)

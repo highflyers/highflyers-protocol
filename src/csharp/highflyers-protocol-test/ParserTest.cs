@@ -14,13 +14,14 @@ namespace HighFlyers.Test.Protocol
 		}
 
 		[Test]
-		public void UsingSentinelAndEndFrameAsAData()
+		public void SimpleParsingData()
 		{
 			var parser = new HighFlyers.Protocol.Parser ();
 			parser.AppendBytes (new byte[] {
-				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.Sentinel, 11, 0,
-				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.EndFrame, 37, 64,
-				57, 0, 0, 0, HighFlyers.Protocol.Parser.EndFrame
+				0, 11, 0,
+				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.EndFrame, 
+				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.Sentinel, 64,
+				HighFlyers.Protocol.Parser.Sentinel, 12, 0, 0, 0, HighFlyers.Protocol.Parser.EndFrame
 			});
 		}
 	}
