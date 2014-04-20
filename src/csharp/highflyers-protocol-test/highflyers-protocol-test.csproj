@@ -45,21 +45,15 @@
     <Compile Include="ParserTest.cs" />
     <Compile Include="FrameBuilder.Build.cs" />
     <Compile Include="Frames.cs" />
-    <Compile Include="..\highflyers-protocol\Frame.cs">
-      <Link>Frame.cs</Link>
-    </Compile>
-    <Compile Include="..\highflyers-protocol\FrameBuilder.cs">
-      <Link>FrameBuilder.cs</Link>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="test_description.hfproto" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\highflyers-protocol\highflyers-protocol.csproj">
       <Project>{EBB700AD-54C4-4AEE-90B4-A6C074617999}</Project>
       <Name>highflyers-protocol</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="test_description.hfproto" />
   </ItemGroup>
 </Project>

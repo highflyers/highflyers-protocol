@@ -108,8 +108,6 @@ Backup*/
 UpgradeLog*.XML
 
 # Generated frames
-Frames.cs
-FrameBuilder.Build.cs
 
 Frames.cpp
 Frames.h

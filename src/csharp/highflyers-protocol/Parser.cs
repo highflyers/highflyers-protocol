@@ -5,80 +5,73 @@ using System.IO;
 
 namespace HighFlyers.Protocol
 {
-    public class FrameParsedArgs : EventArgs
-    {
-        public FrameParsedArgs(Frame frame)
-        {
-            ParsedFrame = frame;
-        }
+	public class FrameParsedEventArgs : EventArgs
+	{
+		public FrameParsedEventArgs (Frame frame)
+		{
+			ParsedFrame = frame;
+		}
 
-        public Frame ParsedFrame { get; private set; }
-    }
+		public Frame ParsedFrame { get; private set; }
+	}
 
-    public class Parser
-    {
-        public static byte EndFrame
-        {
-            get { return 12; }
-        }
-        public static byte Sentinel
-        {
-            get { return 13; }
-        }
-        public static uint MaxLength
-        {
-            get { return 2048; }
-        }
+	public class Parser<T>
+	{
+		private bool prevSentinel;
+		private readonly List<byte> bytes = new List<byte> ();
+		System.Reflection.MethodInfo buildMethod;
 
-        private bool prevSentinel;
+		public delegate void FrameParsedHandler (object sender, FrameParsedEventArgs args);
 
-        private readonly List<byte> bytes = new List<byte>();
+		public event FrameParsedHandler FrameParsed;
 
-        public delegate void FrameParsedHandler(object sender, FrameParsedArgs args);
-        public event FrameParsedHandler FrameParsed;
+		public Parser()
+		{
+			buildMethod = typeof(T).GetMethod ("BuildFrame", new Type[] { typeof(List<byte>) });
 
-        protected void OnFrameParsed(FrameParsedArgs args)
-        {
-            if (FrameParsed != null) 
-                FrameParsed(this, args);
-        }
+			if (buildMethod == null)
+				throw new Exception ("Cannot find method GetMethod in a builder class");
+		}
 
-        public void AppendBytes(byte[] data)
-        {
-            foreach (byte b in data)
-                AppendByte(b);
-        }
+		protected void OnFrameParsed (FrameParsedEventArgs args)
+		{
+			if (FrameParsed != null) 
+				FrameParsed (this, args);
+		}
 
-        private void AppendByte(byte b)
-        {
+		public void AppendBytes (byte[] data)
+		{
+			foreach (byte b in data)
+				AppendByte (b);
+		}
+
+		private void AppendByte (byte b)
+		{
 			bool tmpSentinel = prevSentinel;
-            if (prevSentinel)
-            {
-                if (b == Sentinel || b == EndFrame)
-                    bytes.Add(b);
-                else
-                    throw new InvalidDataException("Unexpected token " + b);
-                prevSentinel = false;
-            }
-            else if (b == Sentinel)
-                prevSentinel = true;
-            else
-                bytes.Add(b);
+			if (prevSentinel) {
+				if (b == FrameParserHelper.Sentinel || b == FrameParserHelper.EndFrame)
+					bytes.Add (b);
+				else
+					throw new InvalidDataException ("Unexpected token " + b);
+				prevSentinel = false;
+			} else if (b == FrameParserHelper.Sentinel)
+				prevSentinel = true;
+			else
+				bytes.Add (b);
 
-            if (b == EndFrame && !tmpSentinel)
-                ParseFrame();
-            else if (MaxLength == bytes.Count)
-            {
-                bytes.Clear();
-                throw new WarningException("Too many bytes without end_frame sign. Dropping data...");
-            }
-        }
+			if (b == FrameParserHelper.EndFrame && !tmpSentinel)
+				ParseFrame ();
+			else if (FrameParserHelper.MaxLength == bytes.Count) {
+				bytes.Clear ();
+				throw new WarningException ("Too many bytes without end_frame sign. Dropping data...");
+			}
+		}
 
-        private void ParseFrame()
-        {
-            Frame frame = FrameBuilder.BuildFrame(bytes);
-
-            OnFrameParsed(new FrameParsedArgs(frame));
-        }
-    }
+		private void ParseFrame ()
+		{
+			Frame frame = buildMethod.Invoke (null, new object[] { bytes }) as Frame;
+			OnFrameParsed (new FrameParsedEventArgs (frame));
+		}
+	}
 }
+

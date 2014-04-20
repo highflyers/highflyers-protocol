@@ -24,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="${ProjectDir}/../highflyers-protocol-generator/bin/${ProjectConfigName}/highflyers-protocol-generator.exe ${ProjectDir}/../../../../protocol_description.hfproto ${ProjectDir}/Frames.cs ${ProjectDir}/FrameBuilder.Build.cs" />
+        <Command type="BeforeBuild" command="" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -47,11 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Frame.cs" />
-    <Compile Include="FrameBuilder.Build.cs" />
-    <Compile Include="FrameBuilder.cs" />
-    <Compile Include="Frames.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FrameParserHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

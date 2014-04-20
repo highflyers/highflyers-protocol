@@ -44,7 +44,7 @@ namespace HighFlyers.Protocol.Generator
         {
             lines.AppendLine("\t\tpublic static Frame BuildFrame(List<byte> bytes)");
             lines.AppendLine("\t\t{");
-            lines.AppendLine("\t\t\tCheckBytes(bytes);");
+            lines.AppendLine("\t\t\tFrameParserHelper.CheckBytes(bytes);");
             lines.AppendLine("\t\t\tFrame frame;");
             lines.AppendLine("\t\t\tswitch ((FrameTypes) bytes[0])");
             lines.AppendLine("\t\t\t{");
