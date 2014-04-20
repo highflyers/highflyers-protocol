@@ -10,11 +10,11 @@ namespace HighFlyers.Protocol
 
         protected bool[] PreParseData(byte[] data)
         {
-            UInt16 fieldFlags = BitConverter.ToUInt16(data, 3);
+            UInt16 fieldFlags = BitConverter.ToUInt16(data, 0);
             var fields = new bool[FieldCount];
 
             for (int i = 0; i < FieldCount; i++)
-                fields[i] = (fieldFlags & (1 >> i)) != 0;
+                fields[i] = (fieldFlags & (1 << i)) != 0;
 
             return fields;
         }

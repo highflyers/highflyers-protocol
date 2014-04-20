@@ -55,7 +55,7 @@ namespace HighFlyers.Protocol.Generator
             }
             lines.AppendLine("\t\t\t\tdefault: throw new InvalidDataException(\"Unexpected frame type\");");
             lines.AppendLine("\t\t\t}");
-            lines.AppendLine("\t\t\tframe.Parse(bytes.GetRange(3, bytes.Count - 3));");
+            lines.AppendLine("\t\t\tframe.Parse(bytes.GetRange(1, bytes.Count - 3));");
             lines.AppendLine("\t\t\treturn frame;");
             lines.AppendLine("\t\t}");
         }
