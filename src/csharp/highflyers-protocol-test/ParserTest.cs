@@ -18,10 +18,13 @@ namespace HighFlyers.Test.Protocol
 		{
 			var parser = new HighFlyers.Protocol.Parser ();
 			parser.AppendBytes (new byte[] {
-				0, 11, 0,
-				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.EndFrame, 
-				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.Sentinel, 64,
-				HighFlyers.Protocol.Parser.Sentinel, 12, 0, 0, 0, HighFlyers.Protocol.Parser.EndFrame
+				0, 255, 255,
+				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.EndFrame, 1, 0, 0,
+				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.Sentinel, 64, 23, 3, 11, 5, 2, 4,
+				2,
+				HighFlyers.Protocol.Parser.Sentinel, HighFlyers.Protocol.Parser.Sentinel, 4, 2, 1,
+				HighFlyers.Protocol.Parser.Sentinel, 12, 0, 0, 0, 
+				HighFlyers.Protocol.Parser.EndFrame
 			});
 		}
 	}
