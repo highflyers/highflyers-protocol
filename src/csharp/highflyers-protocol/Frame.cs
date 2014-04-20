@@ -19,7 +19,7 @@ namespace HighFlyers.Protocol
             return fields;
         }
 
-        public abstract void Parse(List<byte> bytes);
+        public abstract void Parse(List<byte> bytes, FrameParserHelper.EndianType endian);
     }
 
 }

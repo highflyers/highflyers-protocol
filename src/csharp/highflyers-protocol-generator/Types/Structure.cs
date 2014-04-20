@@ -76,7 +76,7 @@ namespace HighFlyers.Protocol.Generator.Types
 
         private string GenerateParser()
         {
-            var builder = new StringBuilder("public override void Parse(List<byte> bytes)\n");
+			var builder = new StringBuilder("public override void Parse(List<byte> bytes, FrameParserHelper.EndianType endianes)\n");
 
             builder.AppendLine("\t\t{");
             builder.AppendLine("\t\t\tbyte[] data = bytes.ToArray();");
@@ -125,8 +125,8 @@ namespace HighFlyers.Protocol.Generator.Types
 			if (index != -1)
 				return "BitConverter.To" + nativeTypes [index] + "(data, iterator + 2)";
 
-			return "\nnew " + type + "(); " + name +
-				".Parse(data.ToList().GetRange(iterator + 2, data.Length - iterator - 2))";
+			return "new " + type + "(); " + name +
+				".Parse(data.ToList().GetRange(iterator + 2, data.Length - iterator - 2), endianes)";
 		}
 
         string GetSizeMethod(string type, string name)
