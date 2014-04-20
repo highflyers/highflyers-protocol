@@ -22,7 +22,7 @@ namespace HighFlyers.Protocol.Generator.Types
             yield return "{";
             yield return "\tget";
             yield return "\t{";
-            yield return "\t\tint size = 0;";
+            yield return "\t\tint size = 2; // enabled fields information";
             foreach (var words in Input)
             {
                 string line = "\t\t";
@@ -49,7 +49,14 @@ namespace HighFlyers.Protocol.Generator.Types
                     throw new Exception("Expected two words in line!");
 
                 var builder = new StringBuilder("public ");
-                builder.Append(string.Join(" ", words));
+
+				if (words [0].EndsWith ("?")) {
+					string nw = words [0].Remove (words [0].Length - 1);
+					if (GetNativeTypeIndex (nw) == -1)
+						words [0] = nw;
+				}
+
+				builder.Append(string.Join(" ", words));
 
                 if (words[0].EndsWith("?"))
                     builder.Append(" = null");
@@ -101,19 +108,24 @@ namespace HighFlyers.Protocol.Generator.Types
             "Single"
         };
         
+		private int GetNativeTypeIndex (string type)
+		{
+			return Array.FindIndex (nativeTypes, t => t.IndexOf (type, StringComparison.InvariantCultureIgnoreCase) != -1);
+		}
+
         string GetConversionMethod(string type, string name)
 		{
 			if (type.EndsWith ("?"))
 				type = type.Remove (type.Length - 1);
             
-			int index = Array.FindIndex (nativeTypes, t => t.IndexOf (type, StringComparison.InvariantCultureIgnoreCase) != -1);
+			int index = GetNativeTypeIndex (type);
 
 			if (index == 0)
 				return "data[iterator + 2]";
 			if (index != -1)
 				return "BitConverter.To" + nativeTypes [index] + "(data, iterator + 2)";
 
-			return "new " + type + "(); " + name +
+			return "\nnew " + type + "(); " + name +
 				".Parse(data.ToList().GetRange(iterator + 2, data.Length - iterator - 2))";
 		}
 

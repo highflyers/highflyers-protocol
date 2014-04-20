@@ -5,3 +5,10 @@ struct TestStruct
 	byte Field3
 	UInt32? Field4
 }
+
+struct SecondStruct
+{
+	TestStruct Field1
+	byte Field2
+	TestStruct? Field3
+}

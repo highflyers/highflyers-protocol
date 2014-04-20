@@ -53,5 +53,30 @@ namespace HighFlyers.Test.Protocol
 			Assert.AreEqual (80, frame.Field3);
 			Assert.IsNull (frame.Field4);
 		}
+
+		[Test]
+		public void StructInStruct ()
+		{
+			var parser = new Parser<FrameBuilder> ();
+
+			parser.AppendBytes (new byte[] { 
+				1, 1  + 2, 0,
+				FrameParserHelper.Sentinel, 1 + 4 + 8, 0,
+				5, 1, 0, 0,
+				80, 
+				52, 0, 0, 0,
+				98,
+				FrameParserHelper.Sentinel, 12, 0, 0, 0,
+				FrameParserHelper.EndFrame
+			});
+
+			var frame = parser.LastFrame as HighFlyers.Protocol.Frames.SecondStruct;
+			Assert.AreEqual (frame.Field1.Field1, 256 + 5);
+			Assert.IsNull (frame.Field1.Field2);
+			Assert.AreEqual (frame.Field1.Field3, 80);
+			Assert.AreEqual (frame.Field1.Field4, 52);
+			Assert.AreEqual (frame.Field2, 98);
+			Assert.IsNull (frame.Field3);
+		}
 	}
 }
