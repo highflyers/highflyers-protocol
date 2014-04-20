@@ -25,12 +25,19 @@ namespace HighFlyers.Protocol
 
 		public event FrameParsedHandler FrameParsed;
 
+		public Frame LastFrame {
+			get;
+			private set;
+		}
+
 		public Parser()
 		{
 			buildMethod = typeof(T).GetMethod ("BuildFrame", new Type[] { typeof(List<byte>) });
 
 			if (buildMethod == null)
 				throw new Exception ("Cannot find method GetMethod in a builder class");
+
+			LastFrame = null;
 		}
 
 		protected void OnFrameParsed (FrameParsedEventArgs args)
@@ -69,8 +76,8 @@ namespace HighFlyers.Protocol
 
 		private void ParseFrame ()
 		{
-			Frame frame = buildMethod.Invoke (null, new object[] { bytes }) as Frame;
-			OnFrameParsed (new FrameParsedEventArgs (frame));
+			LastFrame = buildMethod.Invoke (null, new object[] { bytes }) as Frame;
+			OnFrameParsed (new FrameParsedEventArgs (LastFrame));
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace HighFlyers.Test.Protocol
 		public void SimpleParsingData()
 		{
 			var parser = new Parser<FrameBuilder> ();
+
 			parser.AppendBytes (new byte[] {
 				0, 255, 255,
 				FrameParserHelper.Sentinel, FrameParserHelper.EndFrame, 1, 0, 0,
@@ -27,6 +28,10 @@ namespace HighFlyers.Test.Protocol
 				FrameParserHelper.Sentinel, 12, 0, 0, 0, 
 				FrameParserHelper.EndFrame
 			});
+
+			var frame = parser.LastFrame as HighFlyers.Protocol.Frames.TestStruct;
+			Assert.AreEqual (256 + FrameParserHelper.EndFrame, frame.Field1);
+			Assert.AreEqual (2, frame.Field3);
 		}
 	}
 }
