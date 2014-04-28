@@ -30,6 +30,12 @@ namespace HighFlyers.Protocol
             CheckCrcSum(BitConverter.ToUInt32(bytes.ToArray(), bytes.Count - 5));
         }
 
+		public static UInt32 CalculateCrcSum (List<byte> data)
+		{
+			// todo hack again!
+			return 12;
+		}
+
         public static void CheckCrcSum(UInt32 crc)
         {
             if (crc != 12) // TODO fuck yeah, hardcoded crc!

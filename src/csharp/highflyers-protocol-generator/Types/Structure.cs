@@ -36,12 +36,29 @@ namespace HighFlyers.Protocol.Generator.Types
             yield return "}";
         }
 
+		private IEnumerable<string> GenerateSerialize ()
+		{
+			yield return "public override List<byte> Serialize ()";
+			yield return "{";
+			yield return "\tvar bytes = new List<byte> ();";
+			foreach (var words in Input)
+			{
+				yield return "\tbytes.AddRange(" + GetSerializeMethod (words [0], words [1]) + ");\n";
+			}
+
+			yield return "\treturn bytes;";
+			yield return "}";
+		}
+
         protected override IEnumerable<string> GenerateBody()
         {
             yield return GenerateParser();
             foreach (var l in GenerateCurrentSize())
                 yield return l;
             yield return GenerateFieldCount();
+
+			foreach (var l in GenerateSerialize())
+				yield return l;
 
             foreach (var words in Input)
             {
@@ -144,5 +161,27 @@ namespace HighFlyers.Protocol.Generator.Types
 
             return name + ".CurrentSize";
         }
+
+		string GetSerializeMethod (string type, string name)
+		{
+			if (string.IsNullOrEmpty (type))
+				throw new Exception ("Invalid empty type name!");
+
+			var builder = new StringBuilder ();
+			bool optional = false;
+			if (type.EndsWith ("?")) {
+				builder.Append ("if (name != null) ");
+				optional = true;
+				type = type.Remove (type.Length - 1);
+			}
+
+			int index = Array.FindIndex(nativeTypes, t => t.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
+
+			if (index != -1)
+				return "BitConverter.GetBytes(" + name + (optional ? ".GetValueOrDefault()" : "") + ")";
+
+			return name + ".Serialize()";
+
+		}
     }
 }

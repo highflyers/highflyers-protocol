@@ -46,6 +46,7 @@
     <Compile Include="Frames.cs" />
     <Compile Include="FrameBuilder.cs" />
     <Compile Include="FrameParserHelperTest.cs" />
+    <Compile Include="SerializeTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

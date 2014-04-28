@@ -19,11 +19,11 @@ namespace HighFlyers.Protocol
             return fields;
         }
 
-		protected abstract byte[] Serialize ();
+		public abstract List<byte> Serialize ();
 
 		public byte[] FullSerialize ()
 		{
-			var data = new List<byte> (Serialize ());
+			var data = Serialize ();
 			data.AddRange (BitConverter.GetBytes (FrameParserHelper.CalculateCrcSum (data)));
 			var finishData = new List<byte> ();
 
