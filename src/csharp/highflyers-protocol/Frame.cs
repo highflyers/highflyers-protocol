@@ -19,6 +19,26 @@ namespace HighFlyers.Protocol
             return fields;
         }
 
+		protected abstract byte[] Serialize ();
+
+		public byte[] FullSerialize ()
+		{
+			var data = new List<byte> (Serialize ());
+			data.AddRange (BitConverter.GetBytes (FrameParserHelper.CalculateCrcSum (data)));
+			var finishData = new List<byte> ();
+
+			foreach (var d in data) {
+				if (d == FrameParserHelper.EndFrame || d == FrameParserHelper.Sentinel)
+					finishData.Add (FrameParserHelper.Sentinel);
+
+				finishData.Add (d);
+			}
+
+			finishData.Add (FrameParserHelper.EndFrame);
+
+			return finishData.ToArray ();
+		}
+
         public abstract void Parse(List<byte> bytes, FrameParserHelper.EndianType endian);
     }
 
