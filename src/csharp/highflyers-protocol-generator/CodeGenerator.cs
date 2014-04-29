@@ -22,6 +22,7 @@ namespace HighFlyers.Protocol.Generator
         private readonly string builderFileName;
         private CurrentType currType = CurrentType.None;
         private bool wasStartBracket;
+		private byte idCounter = 0;
         
         private string currentName;
 
@@ -79,7 +80,7 @@ namespace HighFlyers.Protocol.Generator
                 }
                 else if (words.Length == 1 && words[0] == "}")
                 {
-                    AddNewObjectType();
+                    AddNewObjectType(idCounter++);
                 }
                 else if (!wasStartBracket)
                     throw new Exception("Unexpected value " + words[0]);
@@ -88,7 +89,7 @@ namespace HighFlyers.Protocol.Generator
             }
         }
 
-        void AddNewObjectType()
+        void AddNewObjectType(byte id)
         {
             if (!wasStartBracket || currType == CurrentType.None)
                 throw new Exception("Unexpected '}' token");
@@ -96,7 +97,7 @@ namespace HighFlyers.Protocol.Generator
             switch (currType)
             {
                 case CurrentType.Structure:
-                    objectsTypes.Add(new Structure(currentName, currentCollector.ToArray()));
+					objectsTypes.Add(new Structure(currentName, currentCollector.ToArray(), id));
                     break;
                 case CurrentType.Enumeration:
                     objectsTypes.Add(new Enumeration(currentName, currentCollector.ToArray()));

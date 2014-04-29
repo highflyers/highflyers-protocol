@@ -6,7 +6,9 @@ namespace HighFlyers.Protocol.Generator.Types
 {
     class Structure : ObjectType
     {
-        public Structure(string name, string[][] input)
+		private byte id;
+
+		public Structure(string name, string[][] input, byte id)
             : base(name, input)
         {
         }
@@ -41,6 +43,8 @@ namespace HighFlyers.Protocol.Generator.Types
 			yield return "public override List<byte> Serialize ()";
 			yield return "{";
 			yield return "\tvar bytes = new List<byte> ();";
+			yield return "\tbytes.Add(" + id + ");";
+			yield return "\tbytes.Add(255);bytes.Add(255);"; // todo temporary!
 			foreach (var words in Input)
 			{
 				yield return "\tbytes.AddRange(" + GetSerializeMethod (words [0], words [1]) + ");\n";
