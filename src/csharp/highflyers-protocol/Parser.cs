@@ -78,6 +78,7 @@ namespace HighFlyers.Protocol
 		{
 			LastFrame = buildMethod.Invoke (null, new object[] { bytes }) as Frame;
 			OnFrameParsed (new FrameParsedEventArgs (LastFrame));
+			bytes.Clear ();
 		}
 	}
 }
