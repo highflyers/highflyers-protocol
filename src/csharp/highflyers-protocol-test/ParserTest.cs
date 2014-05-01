@@ -25,7 +25,7 @@ namespace HighFlyers.Test.Protocol
 				FrameParserHelper.Sentinel, FrameParserHelper.Sentinel, 64, 23, 3, 11, 5, 2, 4,
 				2,
 				FrameParserHelper.Sentinel, FrameParserHelper.Sentinel, 4, 2, 1,
-				FrameParserHelper.Sentinel, 12, 0, 0, 0, 
+				114, 84, 5, 19,
 				FrameParserHelper.EndFrame
 			});
 
@@ -42,8 +42,8 @@ namespace HighFlyers.Test.Protocol
 			parser.AppendBytes (new byte[] { 
 				0, 1 + 4, 0,
 				5, 1, 0, 0,
-				80, 
-				FrameParserHelper.Sentinel, 12, 0, 0, 0,
+				80,
+				47, 73, 45, 44,
 				FrameParserHelper.EndFrame
 			});
 
@@ -66,7 +66,7 @@ namespace HighFlyers.Test.Protocol
 				80, 
 				52, 0, 0, 0,
 				98,
-				FrameParserHelper.Sentinel, 12, 0, 0, 0,
+				248, 53, 39, 134,
 				FrameParserHelper.EndFrame
 			});
 

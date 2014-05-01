@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace HighFlyers.Protocol
 {
@@ -27,20 +28,13 @@ namespace HighFlyers.Protocol
 
         public static void CheckBytes(List<byte> bytes)
         {
-            CheckCrcSum(BitConverter.ToUInt32(bytes.ToArray(), bytes.Count - 5));
+			if (BitConverter.ToUInt32 (bytes.ToArray (), bytes.Count - 5) != Crc32.CalculateCrc32(bytes.Take (bytes.Count - 5).ToArray ()))
+				throw new InvalidDataException("Invalid crc sum!");
+
         }
 
-		public static UInt32 CalculateCrcSum (List<byte> data)
-		{
-			// todo hack again!
-			return 12;
-		}
-
-        public static void CheckCrcSum(UInt32 crc)
-        {
-            if (crc != 12) // TODO fuck yeah, hardcoded crc!
-                throw new InvalidDataException("Invalid crc sum!");
-        }
+        public static void CheckCrcSum(UInt32 crc, byte[] bytes)
+		{}
 				
 		public static void ReorderIfNeeded (EndianType endian, IList<byte> a, int start, int size)
 		{

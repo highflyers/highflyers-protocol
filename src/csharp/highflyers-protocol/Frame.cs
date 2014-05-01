@@ -24,7 +24,7 @@ namespace HighFlyers.Protocol
 		public byte[] FullSerialize ()
 		{
 			var data = Serialize ();
-			data.AddRange (BitConverter.GetBytes (FrameParserHelper.CalculateCrcSum (data)));
+			data.AddRange (BitConverter.GetBytes (Crc32.CalculateCrc32 (data.ToArray ())));
 			var finishData = new List<byte> ();
 
 			foreach (var d in data) {
