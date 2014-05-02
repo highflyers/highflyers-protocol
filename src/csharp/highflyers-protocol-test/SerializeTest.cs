@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using HighFlyers.Protocol.Frames;
+using HighFlyers.Protocol;
 
 namespace HighFlyers.Test.Protocol
 {
@@ -15,6 +16,16 @@ namespace HighFlyers.Test.Protocol
 			ts.Field4 = 108;
 
 			byte[] data = ts.FullSerialize ();
+
+			var parser = new Parser<FrameBuilder> ();
+			parser.AppendBytes (data);
+
+			var frame = parser.LastFrame as TestStruct;
+
+			Assert.AreEqual (ts.Field1, frame.Field1);
+			Assert.AreEqual (ts.Field2, frame.Field2);
+			Assert.AreEqual (ts.Field3, frame.Field3);
+			Assert.AreEqual (ts.Field4, frame.Field4);
 		}
 	}
 }

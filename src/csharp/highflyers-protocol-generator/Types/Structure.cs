@@ -42,14 +42,15 @@ namespace HighFlyers.Protocol.Generator.Types
 		{
 			yield return "public override List<byte> Serialize ()";
 			yield return "{";
+			yield return "\tushort mustBe = 0;";
 			yield return "\tvar bytes = new List<byte> ();";
 			yield return "\tbytes.Add(" + id + ");";
-			yield return "\tbytes.Add(255);bytes.Add(255);"; // todo temporary!
+			int i = 0;
 			foreach (var words in Input)
 			{
-				yield return "\tbytes.AddRange(" + GetSerializeMethod (words [0], words [1]) + ");\n";
+				yield return GetSerializeMethod (words [0], words [1], i++);
 			}
-
+			yield return "var mb = BitConverter.GetBytes (mustBe); bytes.Insert (1, mb [0]);bytes.Insert (2, mb [1]);";
 			yield return "\treturn bytes;";
 			yield return "}";
 		}
@@ -64,7 +65,7 @@ namespace HighFlyers.Protocol.Generator.Types
 			foreach (var l in GenerateSerialize())
 				yield return l;
 
-            foreach (var words in Input)
+		    foreach (var words in Input)
             {
                 if (words.Length != 2)
                     throw new Exception("Expected two words in line!");
@@ -75,7 +76,7 @@ namespace HighFlyers.Protocol.Generator.Types
 					string nw = words [0].Remove (words [0].Length - 1);
 					if (GetNativeTypeIndex (nw) == -1)
 						words [0] = nw;
-				}
+				} 
 
 				builder.Append(string.Join(" ", words));
 
@@ -87,7 +88,7 @@ namespace HighFlyers.Protocol.Generator.Types
                 // todo check types (words[0])
                 yield return builder.ToString();
             }
-        }
+		}
 
         private string GenerateFieldCount()
         {
@@ -166,7 +167,7 @@ namespace HighFlyers.Protocol.Generator.Types
             return name + ".CurrentSize";
         }
 
-		string GetSerializeMethod (string type, string name)
+		string GetSerializeMethod (string type, string name, int number)
 		{
 			if (string.IsNullOrEmpty (type))
 				throw new Exception ("Invalid empty type name!");
@@ -174,18 +175,29 @@ namespace HighFlyers.Protocol.Generator.Types
 			var builder = new StringBuilder ();
 			bool optional = false;
 			if (type.EndsWith ("?")) {
-				builder.Append ("if (name != null) ");
+				builder.Append ("\tif (" + name + " != null) { ");
 				optional = true;
 				type = type.Remove (type.Length - 1);
 			}
-
+			
+			builder.Append ("mustBe = (ushort)(mustBe | (1 << " + number + "));");
+			builder.Append ("bytes.AddRange (");
 			int index = Array.FindIndex(nativeTypes, t => t.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
 
-			if (index != -1)
-				return "BitConverter.GetBytes(" + name + (optional ? ".GetValueOrDefault()" : "") + ")";
+			if (index != -1) {
+				if (type != "byte")
+					builder.Append ("BitConverter.GetBytes(" + name + (optional ? ".GetValueOrDefault()" : "") + ")");
+				else
+					builder.Append ("new byte[]{" + name + (optional ? ".GetValueOrDefault()" : "") + "}");
+			}
+			else
+				builder.Append (name + ".Serialize()");
+			builder.Append (");\n");
 
-			return name + ".Serialize()";
+			if (optional) 
+				builder.Append ("}");
 
+			return builder.ToString ();
 		}
     }
 }
