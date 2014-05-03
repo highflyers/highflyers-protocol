@@ -33,8 +33,10 @@
   <ItemGroup>
     <Compile Include="main.c" />
     <Compile Include="parser.c" />
+    <Compile Include="frame_parser_helper.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="parser.h" />
+    <None Include="frame_parser_helper.h" />
   </ItemGroup>
 </Project>

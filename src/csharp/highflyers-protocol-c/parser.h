@@ -1,16 +1,7 @@
 #ifndef HIGHFLYERS_PROTOCOL_PARSER_H
 #define HIGHFLYERS_PROTOCOL_PARSER_H
 
-typedef unsigned char byte;
-typedef unsigned char bool;
-
-#define true 1
-#define false 0
-
-#define FRAMEPARSER_HELPER_MAXLENGTH 2048
-// todo update defined values
-#define FRAMEPARSER_HELPER_SENTINEL 00 
-#define FRAMEPARSER_HELPER_ENDFRAME 00
+#include "frame_parser_helper.h"
 
 typedef struct {
 	bool prev_sentinel;
@@ -18,7 +9,8 @@ typedef struct {
 	int iterator;
 } HighFlyersParser;
 
-void append_bytes (HighFlyersParser* obj, byte bytes[], int size);
-void append_byte (HighFlyersParser* obj, byte b);
+void parser_initialize (HighFlyersParser* obj);
+void parser_append_bytes (HighFlyersParser* obj, byte bytes[], int size);
+void parser_append_byte (HighFlyersParser* obj, byte b);
 
 #endif

@@ -2,7 +2,13 @@
 
 void parse_frame (HighFlyersParser* obj);
 
-void append_bytes (HighFlyersParser* obj, byte bytes[], int size)
+void parser_initialize (HighFlyersParser* obj)
+{
+	obj->prev_sentinel = false;
+	obj->iterator = 0;
+	}
+
+void parser_append_bytes (HighFlyersParser* obj, byte bytes[], int size)
 {
 	int i;
 	
@@ -13,7 +19,7 @@ void append_bytes (HighFlyersParser* obj, byte bytes[], int size)
 	}
 }
 
-void append_byte (HighFlyersParser* obj, byte b)
+void parser_append_byte (HighFlyersParser* obj, byte b)
 {
 	bool tmp_sentinel = obj->prev_sentinel;
 	
