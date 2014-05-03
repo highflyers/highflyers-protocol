@@ -38,6 +38,8 @@ uint32 frame_parser_helper_to_uint32 (byte* bytes, int index)
 	
 	for (i = 0; i < 4; i++)
 		val = val | (bytes [i] << (i * 8));
+		
+	return val;
 }
 
 bool frame_parser_helper_check_bytes (byte* bytes, int size)
