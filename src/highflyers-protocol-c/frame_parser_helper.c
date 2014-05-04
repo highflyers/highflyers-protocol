@@ -3,7 +3,10 @@
 byte crc_tab[256];
 
 uint32 frame_parser_helper_calculate_crc (byte* bytes, int size);
-uint32 frame_parser_helper_to_uint32 (byte* bytes, int index);
+
+CONVERT_TO_DATATYPE(uint32);
+CONVERT_TO_DATATYPE(uint16);
+CONVERT_TO_DATATYPE(double);
 
 void init_highflyers_protocol ()
 {
@@ -31,16 +34,6 @@ uint32 frame_parser_helper_calculate_crc (byte* bytes, int size)
 	return ~crc;
 }
 
-uint32 frame_parser_helper_to_uint32 (byte* bytes, int index)
-{
-	uint32 val = 0;
-	int i = 0;
-	
-	for (i = 0; i < 4; i++)
-		val = val | (bytes [i] << (i * 8));
-		
-	return val;
-}
 
 bool frame_parser_helper_check_bytes (byte* bytes, int size)
 {

@@ -35,11 +35,15 @@
     <Compile Include="parser.c" />
     <Compile Include="frame_parser_helper.c" />
     <Compile Include="TestFramework\TestFramework.c" />
+    <Compile Include="frame_builder.c" />
+    <Compile Include="frames.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="parser.h" />
     <None Include="frame_parser_helper.h" />
     <None Include="TestFramework\TestFramework.h" />
+    <None Include="frame_builder.h" />
+    <None Include="frames.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestFramework\" />
