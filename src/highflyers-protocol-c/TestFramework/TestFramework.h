@@ -27,7 +27,8 @@ extern int failed;
 #define TEST_SUMMARY \
 	printf ("\n%c[0;0mFailed: %d Passed: %d\n", 27, failed, passed);	\
 	if (!failed) \
-		printf ("%c[1;32mNice, no failing tests!", 27);
-		
+		printf ("%c[1;32mNice, no failing tests!\n", 27); \
+	printf ("%c[0;0m", 27);
+
 
 #endif
