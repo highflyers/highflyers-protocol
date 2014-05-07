@@ -18,7 +18,6 @@ typedef struct {
 
 
 void parser_initialize (HighFlyersParser* obj);
-void parser_append_bytes (HighFlyersParser* obj, byte bytes[], int size);
 void parser_append_byte (HighFlyersParser* obj, byte b);
 
 #endif

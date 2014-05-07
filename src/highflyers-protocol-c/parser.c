@@ -10,18 +10,6 @@ void parser_initialize (HighFlyersParser* obj)
 	obj->last_frame_actual = false;
 }
 
-
-// todo don't use this method. It should be removed!
-void parser_append_bytes (HighFlyersParser* obj, byte bytes[], int size)
-{
-	int i;
-	bool new_frame;
-	for (i = 0; i < size; i++) 
-	{
-		parser_append_byte(obj, bytes[i]);
-	}
-}
-
 void parser_append_byte (HighFlyersParser* obj, byte b)
 {
 	bool tmp_sentinel = obj->prev_sentinel;
