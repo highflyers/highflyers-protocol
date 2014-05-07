@@ -1,4 +1,5 @@
 #include "frames.h"
+#include "frame_parser_helper.h"
 #include <stdlib.h>
 
 void frames_preparse_data(const byte* data, bool* output, int field_count)

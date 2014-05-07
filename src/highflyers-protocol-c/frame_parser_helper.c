@@ -8,12 +8,11 @@ CONVERT_TO_DATATYPE(uint32);
 CONVERT_TO_DATATYPE(uint16);
 CONVERT_TO_DATATYPE(double);
 
-void frame_parser_helper_set_uint32 (byte* bytes, uint32 value) {}
-void frame_parser_helper_set_double (byte* bytes, double value) {}
-void frame_parser_helper_set_uint16 (byte* bytes, uint16 value) {}
-void frame_parser_helper_set_byte (byte* bytes, byte value) {}
-void frame_parser_helper_set_int32 (byte* bytes, int32 value) {}
-
+SETTER_TO_ARRAY_DATATYPE(double)
+SETTER_TO_ARRAY_DATATYPE(uint16)
+SETTER_TO_ARRAY_DATATYPE(byte)
+SETTER_TO_ARRAY_DATATYPE(uint32)
+SETTER_TO_ARRAY_DATATYPE(int32)
 
 void init_highflyers_protocol ()
 {
