@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "frame_builder.h"
 
 void parse_frame (HighFlyersParser* obj);
 
@@ -6,16 +7,18 @@ void parser_initialize (HighFlyersParser* obj)
 {
 	obj->prev_sentinel = false;
 	obj->iterator = 0;
-	}
+	obj->last_frame_actual = false;
+}
 
+
+// todo don't use this method. It should be removed!
 void parser_append_bytes (HighFlyersParser* obj, byte bytes[], int size)
 {
 	int i;
-	
+	bool new_frame;
 	for (i = 0; i < size; i++) 
 	{
-		obj->bytes[obj->iterator++ % FRAMEPARSER_HELPER_MAXLENGTH] = bytes[i];
-		// todo log somewhere about iterator's restart
+		parser_append_byte(obj, bytes[i]);
 	}
 }
 
@@ -48,5 +51,8 @@ void parser_append_byte (HighFlyersParser* obj, byte b)
 
 void parse_frame (HighFlyersParser* obj)
 {
-
+	FrameProxy p;
+	p = frame_builder_build_frame (obj->bytes, obj->iterator);
+	obj->last_frame = p;
+	obj->last_frame_actual = true;
 }

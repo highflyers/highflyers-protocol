@@ -8,6 +8,13 @@ CONVERT_TO_DATATYPE(uint32);
 CONVERT_TO_DATATYPE(uint16);
 CONVERT_TO_DATATYPE(double);
 
+void frame_parser_helper_set_uint32 (byte* bytes, uint32 value) {}
+void frame_parser_helper_set_double (byte* bytes, double value) {}
+void frame_parser_helper_set_uint16 (byte* bytes, uint16 value) {}
+void frame_parser_helper_set_byte (byte* bytes, byte value) {}
+void frame_parser_helper_set_int32 (byte* bytes, int32 value) {}
+
+
 void init_highflyers_protocol ()
 {
 	uint32 i, j, poly = 0xedb88320, temp = 0;
@@ -33,7 +40,6 @@ uint32 frame_parser_helper_calculate_crc (byte* bytes, int size)
 	
 	return ~crc;
 }
-
 
 bool frame_parser_helper_check_bytes (byte* bytes, int size)
 {

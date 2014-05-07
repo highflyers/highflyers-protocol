@@ -19,7 +19,7 @@ typedef struct
 	bool Field4_enabled;
 } TestStruct;
 
-TestStruct TestStruct_parse (const byte* data, int size);
+TestStruct* TestStruct_parse (const byte* data, int size);
 int TestStruct_current_size (const TestStruct* value);
 
 typedef struct

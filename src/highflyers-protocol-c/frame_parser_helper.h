@@ -9,6 +9,7 @@
 
 typedef unsigned char byte;
 typedef unsigned char bool;
+typedef int int32;
 typedef unsigned int uint32;
 typedef unsigned short uint16;
 
@@ -27,6 +28,11 @@ bool frame_parser_helper_check_bytes (byte* bytes, int size);
 uint32 frame_parser_helper_to_uint32 (const byte* bytes, int index);
 uint16 frame_parser_helper_to_uint16 (const byte* bytes, int index);
 double frame_parser_helper_to_double (const byte* bytes, int index);
+
+// todo implement this methods!
+void frame_parser_helper_set_uint32 (byte* bytes, uint32 value);
+void frame_parser_helper_set_double (byte* bytes, double value);
+void frame_parser_helper_set_uint16 (byte* bytes, uint16 value);
 
 #define CONVERT_TO_DATATYPE( type ) \
 type frame_parser_helper_to_##type (const byte* bytes, int index) \
