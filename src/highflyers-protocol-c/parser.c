@@ -53,7 +53,7 @@ void parse_frame (HighFlyersParser* obj)
 {
 	FrameProxy p;
 	p = frame_builder_build_frame (obj->bytes, obj->iterator);
-	if (p.pointer == NULL)
+	if (p.pointer != NULL)
 	{
 		obj->last_frame_actual = true;
 		obj->last_frame = p;

@@ -5,7 +5,7 @@ FrameProxy frame_builder_build_frame (byte* bytes, int size)
 	FrameProxy proxy;
 	frame_proxy_initialize(&proxy);
 
-	if (frame_parser_helper_check_bytes (bytes, size))
+	if (!frame_parser_helper_check_bytes (bytes, size))
 		return proxy;
 
 	byte endianes = bytes [0] & 128;

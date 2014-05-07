@@ -31,6 +31,7 @@ void simple_parser_test ()
 	FrameProxy p = parser_get_last_frame_ownership(&parser);
 	ASSERT_EQ(T_TestStruct, p.type, "%d");
 	TestStruct* str = (TestStruct*)p.pointer;
+	ASSERT_TRUE(str);
 	ASSERT_EQ(256 + FRAMEPARSER_HELPER_ENDFRAME, str->Field1, "%d");
 	ASSERT_EQ(2, str->Field3, "%d");
 	frame_proxy_free(&p);

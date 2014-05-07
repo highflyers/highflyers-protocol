@@ -11,6 +11,7 @@ extern int failed;
 	} else { \
 		printf("%c[1;31mFAILED: %s\n", 27, __FUNCTION__); \
 		failed++; \
+		return; \
 	}
 
 #define ASSERT_EQ(expected, actual, format) \
@@ -22,6 +23,7 @@ extern int failed;
 		printf("Expected: "); printf(format, expected); \
 		printf("\nActual: "); printf(format, actual); \
 		failed++; \
+		return;\
 	}
 	
 #define TEST_SUMMARY \
