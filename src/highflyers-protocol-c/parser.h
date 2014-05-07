@@ -8,6 +8,9 @@ typedef struct {
 	void* pointer;
 } FrameProxy;
 
+void frame_proxy_initialize(FrameProxy* proxy);
+void frame_proxy_free(FrameProxy* proxy);
+
 typedef struct {
 	bool prev_sentinel;
 	byte bytes[FRAMEPARSER_HELPER_MAXLENGTH];
@@ -19,5 +22,7 @@ typedef struct {
 
 void parser_initialize (HighFlyersParser* obj);
 void parser_append_byte (HighFlyersParser* obj, byte b);
+bool parser_has_frame (const HighFlyersParser* obj);
+FrameProxy parser_get_last_frame_ownership (HighFlyersParser* obj);
 
 #endif

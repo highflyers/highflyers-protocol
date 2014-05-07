@@ -1,4 +1,5 @@
 #include "frames.h"
+#include <stdlib.h>
 
 void frames_preparse_data(const byte* data, bool* output, int field_count)
 {
@@ -23,7 +24,11 @@ TestStruct* TestStruct_parse(const byte* data, int size)
 		value->Field1 = frame_parser_helper_to_uint32(data, iterator + 2);
 		iterator += sizeof(uint32);
 	}
-	else ; // todo throw new Exception("field Field1 must be enabled! It's not an optional value!");
+	else
+	{
+		free (value);
+		return NULL;
+	}
 	if (fields[1])
 	{
 		value->Field2 = frame_parser_helper_to_double (data, iterator + 2);
@@ -35,7 +40,11 @@ TestStruct* TestStruct_parse(const byte* data, int size)
 		value->Field3 = data[iterator + 2];
 		iterator += sizeof(byte);
 	}
-	else ; //todo throw new Exception("field Field3 must be enabled! It's not an optional value!");
+	else
+	{
+		free (value);
+		return NULL;
+	}
 	if (fields[3])
 	{
 		value->Field4 = frame_parser_helper_to_uint32(data, iterator + 2);

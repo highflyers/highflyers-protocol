@@ -27,13 +27,13 @@ void simple_parser_test ()
 	for (i = 0; i < 28; i++)
 		parser_append_byte(&parser, bytes[i]);
 
-	ASSERT_TRUE(parser.last_frame_actual);
-	FrameProxy p = parser.last_frame;
+	ASSERT_TRUE(parser_has_frame(&parser));
+	FrameProxy p = parser_get_last_frame_ownership(&parser);
 	ASSERT_EQ(T_TestStruct, p.type, "%d");
 	TestStruct* str = (TestStruct*)p.pointer;
 	ASSERT_EQ(256 + FRAMEPARSER_HELPER_ENDFRAME, str->Field1, "%d");
 	ASSERT_EQ(2, str->Field3, "%d");
-	free(p.pointer);
+	frame_proxy_free(&p);
 }
 
 int main (int argc, char *argv[])

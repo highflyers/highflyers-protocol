@@ -1,12 +1,11 @@
 #ifndef HIGHFLYERS_PROTOCOL_FRAMES_H
 #define HIGHFLYERS_PROTOCOL_FRAMES_H
 
-#include "frame_parser_helper.h"
+#include "types.h"
 
 typedef enum 
 {
-	T_TestStruct,
-	T_SecondStruct
+	T_TestStruct
 } FrameTypes;
 
 typedef struct

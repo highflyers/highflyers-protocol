@@ -44,6 +44,7 @@
     <None Include="TestFramework\TestFramework.h" />
     <None Include="frame_builder.h" />
     <None Include="frames.h" />
+    <None Include="types.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestFramework\" />
