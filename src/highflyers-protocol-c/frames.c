@@ -1,25 +1,17 @@
+#include "frame.h"
 #include "frames.h"
 #include "frame_parser_helper.h"
 #include <stdlib.h>
-
-void frames_preparse_data(const byte* data, bool* output, int field_count)
-{
-	uint16 field_flags = frame_parser_helper_to_uint16(data, 0);
-	int i;
-
-	for (i = 0; i < field_count; i++)
-		output[i] = (field_flags & (1 << i)) != 0;
-}
 
 TestStruct* TestStruct_parse(const byte* data, int size)
 {
 	bool fields[4];
 	int iterator = 0;
 	TestStruct* value;
-	
+
 	value = (TestStruct*)malloc(sizeof(TestStruct));
-	frames_preparse_data(data, fields, 4);
-	
+	frame_preparse_data(data, fields, 4);
+
 	if (fields[0])
 	{
 		value->Field1 = frame_parser_helper_to_uint32(data, iterator + 2);
@@ -76,24 +68,24 @@ void TestStruct_serialize (const TestStruct* value, byte* output)
 	must_be = (uint16)(must_be | (1 << 0));
 	frame_parser_helper_set_uint32 (output + iterator, value->Field1);
 	iterator += sizeof(uint32);
-	
+
 	if (value->Field2_enabled)
 	{
 		must_be = (uint16)(must_be | (1 << 1));
 		frame_parser_helper_set_double (output + iterator, value->Field2);
 		iterator += sizeof(double);
 	}
-	
+
 	must_be = (uint16)(must_be | (1 << 2));
 	frame_parser_helper_set_byte (output + iterator, value->Field3);
 	iterator += sizeof (byte);
 
 	if (value->Field4_enabled)
 	{
-		must_be = (uint16)(must_be | (1 << 4));
+		must_be = (uint16)(must_be | (1 << 3));
 		frame_parser_helper_set_int32 (output + iterator, value->Field4);
 		iterator += sizeof(int32);
 	}
-	
+
 	frame_parser_helper_set_uint16 (output + 1, must_be);
 }

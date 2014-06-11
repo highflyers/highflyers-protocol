@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-typedef enum 
+typedef enum
 {
 	T_TestStruct
 } FrameTypes;
@@ -20,5 +20,6 @@ typedef struct
 
 TestStruct* TestStruct_parse (const byte* data, int size);
 int TestStruct_current_size (const TestStruct* value);
+void TestStruct_serialize (const TestStruct* value, byte* output);
 
 #endif
