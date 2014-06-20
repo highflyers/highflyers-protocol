@@ -37,7 +37,6 @@
     <Compile Include="TestFramework\TestFramework.c" />
     <Compile Include="frame_builder.c" />
     <Compile Include="frames.c" />
-    <Compile Include="frame.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="parser.h" />
@@ -46,7 +45,6 @@
     <None Include="frame_builder.h" />
     <None Include="frames.h" />
     <None Include="types.h" />
-    <None Include="frame.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestFramework\" />

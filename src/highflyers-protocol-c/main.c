@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "frame.h"
 #include "frames.h"
 #include "TestFramework/TestFramework.h"
 #include <stdio.h>
@@ -40,7 +39,7 @@ void simple_parser_test ()
 	frame_proxy_free(&p);
 }
 
-void serialize_test ()
+void serialize_parser_test ()
 {
 	int i;
 	TestStruct* str = (TestStruct*)malloc(sizeof(TestStruct));
@@ -48,24 +47,25 @@ void serialize_test ()
 	str->Field3 = 13;
 	str->Field4 = 108;
 
-	int str_size = TestStruct_current_size(str);
+	str->Field2_enabled = 0;
+	str->Field4_enabled = 1;
 
-	byte* data = (byte*)malloc(sizeof(byte)*str_size);
+	int frame_size = 30;
+
+	byte* data = (byte*)malloc(frame_size);
 
 	TestStruct_serialize(str, data);
 
-	byte* frame_bytes = (byte*)malloc(sizeof(byte)*str_size + 10 /*for crc and others*/);
-
-	int frame_size = frame_serialize(data, str_size, frame_bytes);
-
-	free(data);
-
 	HighFlyersParser parser;
 
-	parser_initialize(&parser);
+	parser_initialize (&parser);
 
 	for (i = 0; i < frame_size; i++)
-		parser_append_byte(&parser, frame_bytes[i]);
+	{
+		parser_append_byte(&parser, data[i]);
+		if (parser_has_frame(&parser))
+			break;
+	}
 
 	ASSERT_TRUE(parser_has_frame(&parser));
 	FrameProxy p = parser_get_last_frame_ownership(&parser);
@@ -75,16 +75,57 @@ void serialize_test ()
 	ASSERT_EQ(str->Field3, frame->Field3, "%d");
 	ASSERT_EQ(str->Field4, frame->Field4, "%d");
 
-	free(frame_bytes);
+	free(data);
 	free(str);
 	frame_proxy_free(&p);
 }
 
+void serialize_test ()
+{
+	byte bytes[] =
+	{ 0, 15, 0,
+	FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0,
+	FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 64, 23, 3, 11, 5,
+			2, 4, 2,
+			FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 4, 2, 1,
+			114, 84, 5, 19,
+			FRAMEPARSER_HELPER_ENDFRAME };
+	int i;
+	TestStruct* str = (TestStruct*)malloc (sizeof(TestStruct));
+	str->Field1 = 256 + FRAMEPARSER_HELPER_ENDFRAME;
+	str->Field3 = 2;
+
+	str->Field2_enabled = 1;
+	str->Field4_enabled = 1;
+
+	int frame_size = sizeof(bytes);
+
+	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
+
+	TestStruct_serialize (str, data);
+
+	bool passed = 1;
+
+	for (i = 0; i < sizeof(bytes) - 5; i++)
+		if (bytes[i] != data[i])
+		{
+			passed = 0;
+			break;
+		}
+
+	ASSERT_TRUE(passed);
+
+	free (data);
+	free (str);
+}
+
 int main (int argc, char *argv[])
 {
-	check_frame_parser_helper_to_uint32();
+	init_highflyers_protocol ();
+	check_frame_parser_helper_to_uint32 ();
 	simple_parser_test ();
 	serialize_test ();
+	serialize_parser_test ();
 
 	TEST_SUMMARY
 

@@ -33,7 +33,7 @@ Global
 		{F92AF33D-73D4-4CB4-A870-267AD8F685AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = highflyers-protocol-c\highflyers-protocol-c.cproj
+		StartupItem = highflyers-protocol-test\highflyers-protocol-test.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
