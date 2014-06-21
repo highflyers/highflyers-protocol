@@ -12,6 +12,16 @@ void check_frame_parser_helper_to_uint32 ()
 	ASSERT_EQ(v , 276, "%d")
 }
 
+void test_crc32()
+{
+	byte input[] = {1,3,0,13,0,5,1,0,0,80,52,0,0,0,98};
+	uint32 expected = 2250716664;
+
+	uint32 result = frame_parser_helper_calculate_crc(input, sizeof(input));
+
+	ASSERT_EQ(expected, result, "%u");
+}
+
 void test_struct_parser_test ()
 {
 	byte bytes[] = { 0, 255, 255,
@@ -108,8 +118,6 @@ void test_struct_serialize_test ()
 	bool passed = 1;
 	for (i = 0; i < sizeof(bytes); i++)
 	{
-		if (i > (sizeof(bytes) - 6)) continue; // skip crc32 check
-
 		if (bytes[i] != data[i])
 		{
 			passed = 0;
@@ -166,8 +174,8 @@ void second_struct_serialize_test ()
 	byte bytes[] =
 	{ 1, 7, 0, FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 0,
 			101, 0, 0, 0, 243, 32, 0, 0, 0, 55, FRAMEPARSER_HELPER_SENTINEL,
-			FRAMEPARSER_HELPER_SENTINEL, 0, 43, 0, 0, 0, 223, 210, 4, 0, 0, 75,
-			255, 255, 255, FRAMEPARSER_HELPER_ENDFRAME };
+			FRAMEPARSER_HELPER_SENTINEL, 0, 43, 0, 0, 0, 223, 210, 4, 0, 0, 182,
+			153, 208, 66, FRAMEPARSER_HELPER_ENDFRAME };
 	int i;
 	SecondStruct* str = (SecondStruct*)malloc (sizeof(SecondStruct));
 	str->Field1.Field1 = 101;
@@ -194,8 +202,6 @@ void second_struct_serialize_test ()
 	bool passed = 1;
 	for (i = 0; i < sizeof(bytes); i++)
 	{
-		if (i > (sizeof(bytes) - 6)) continue; // skip crc32 check
-
 		if (bytes[i] != data[i])
 		{
 			passed = 0;
@@ -254,6 +260,7 @@ int main (int argc, char *argv[])
 {
 	init_highflyers_protocol ();
 	check_frame_parser_helper_to_uint32 ();
+	test_crc32();
 
 	test_struct_parser_test ();
 	test_struct_serialize_test ();

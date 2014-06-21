@@ -133,7 +133,7 @@ void TestStruct_serialize (const TestStruct* value, byte* output)
 
 	int iterator = TestStruct_preserialize(value, data + 1);
 
-	uint32 crc = frame_parser_helper_calculate_crc (data, iterator);
+	uint32 crc = frame_parser_helper_calculate_crc (data, iterator + 1);
 
 	frame_parser_helper_set_uint32 (data + 1 + iterator, crc);
 
@@ -239,7 +239,7 @@ void SecondStruct_serialize (const SecondStruct* value, byte* output)
 
 	int iterator = SecondStruct_preserialize(value, data + 1);
 
-	uint32 crc = frame_parser_helper_calculate_crc (data, iterator);
+	uint32 crc = frame_parser_helper_calculate_crc (data, iterator + 1);
 
 	frame_parser_helper_set_uint32 (data + 1 + iterator, crc);
 

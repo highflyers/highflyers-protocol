@@ -1,6 +1,6 @@
 #include "frame_parser_helper.h"
 
-byte crc_tab[256];
+uint32 crc_tab[256];
 
 uint32 frame_parser_helper_calculate_crc (byte* bytes, int size);
 
