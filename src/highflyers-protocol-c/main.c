@@ -84,21 +84,19 @@ void test_struct_serialize_parser_test ()
 void test_struct_serialize_test ()
 {
 	byte bytes[] =
-	{ 0, 15, 0,
-	FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0,
-	10, 64, 23, 3, 11, 5,
-			2, 4, 2,
-			FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 4, 2, 1,
-			114, 84, 5, 19,
-			FRAMEPARSER_HELPER_ENDFRAME };
+	{ 0,
+	FRAMEPARSER_HELPER_SENTINEL,
+	FRAMEPARSER_HELPER_SENTINEL, 0,
+	FRAMEPARSER_HELPER_SENTINEL,
+	FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0, 2, 47, 1, 0, 0, 221, 254, 140, 25,
+	FRAMEPARSER_HELPER_ENDFRAME };
 	int i;
 	TestStruct* str = (TestStruct*)malloc (sizeof(TestStruct));
 	str->Field1 = 256 + FRAMEPARSER_HELPER_ENDFRAME;
-	memcpy(&str->Field2, bytes + 8, sizeof(double));
 	str->Field3 = 2;
-	str->Field4 = 16909325;
+	str->Field4 = 303;
 
-	str->Field2_enabled = 1;
+	str->Field2_enabled = 0;
 	str->Field4_enabled = 1;
 
 	int frame_size = sizeof(bytes);
@@ -125,11 +123,49 @@ void test_struct_serialize_test ()
 	free (str);
 }
 
+
+void second_struct_parser_test ()
+{
+	byte bytes[] =
+	{
+			1, 1  + 2, 0,
+			FRAMEPARSER_HELPER_SENTINEL, 1 + 4 + 8, 0,
+			5, 1, 0, 0,
+			80,
+			52, 0, 0, 0,
+			98,
+			248, 53, 39, 134,
+			FRAMEPARSER_HELPER_ENDFRAME
+	};
+
+	int i;
+	HighFlyersParser parser;
+
+	parser_initialize(&parser);
+
+	for (i = 0; i < sizeof(bytes); i++)
+		parser_append_byte(&parser, bytes[i]);
+
+	ASSERT_TRUE(parser_has_frame(&parser));
+	FrameProxy p = parser_get_last_frame_ownership(&parser);
+	ASSERT_EQ(T_SecondStruct, p.type, "%d");
+	SecondStruct* str = (SecondStruct*)p.pointer;
+	ASSERT_TRUE(str);
+	ASSERT_EQ(256 + 5, str->Field1.Field1, "%d");
+	ASSERT_TRUE(!str->Field1.Field2_enabled);
+	ASSERT_EQ(80, str->Field1.Field3, "%d");
+	ASSERT_EQ(52, str->Field1.Field4, "%d");
+	ASSERT_EQ(98, str->Field2, "%d");
+	ASSERT_TRUE(!str->Field3_enabled);
+
+	frame_proxy_free(&p);
+}
+
 void second_struct_serialize_test ()
 {
 	byte bytes[] =
-	{ 0, 7, 0, 0, FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 0,
-			101, 0, 0, 0, 243, 32, 0, 0, 0, 55, 0, FRAMEPARSER_HELPER_SENTINEL,
+	{ 1, 7, 0, FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 0,
+			101, 0, 0, 0, 243, 32, 0, 0, 0, 55, FRAMEPARSER_HELPER_SENTINEL,
 			FRAMEPARSER_HELPER_SENTINEL, 0, 43, 0, 0, 0, 223, 210, 4, 0, 0, 75,
 			255, 255, 255, FRAMEPARSER_HELPER_ENDFRAME };
 	int i;
@@ -173,6 +209,47 @@ void second_struct_serialize_test ()
 	free (str);
 }
 
+void second_struct_serialize_parser_test ()
+{
+	int i;
+	SecondStruct* str = (SecondStruct*)malloc(sizeof(SecondStruct));
+	TestStruct ts;
+	ts.Field1 = 256 + 5;
+	ts.Field3 = 80;
+	ts.Field4 = 52;
+	ts.Field2_enabled = 0;
+	ts.Field4_enabled = 1;
+	str->Field1 = ts;
+
+	str->Field2 = 98;
+	str->Field3_enabled = 0;
+
+	int frame_size = 22;
+
+	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
+
+	SecondStruct_serialize (str, data);
+
+	HighFlyersParser parser;
+
+	parser_initialize(&parser);
+
+	for (i = 0; i < frame_size; i++)
+		parser_append_byte(&parser, data[i]);
+
+	ASSERT_TRUE(parser_has_frame(&parser));
+	FrameProxy p = parser_get_last_frame_ownership(&parser);
+	ASSERT_EQ(T_SecondStruct, p.type, "%d");
+	SecondStruct* frame = (SecondStruct*)p.pointer;
+	ASSERT_TRUE(frame);
+	ASSERT_EQ(frame->Field1.Field1, str->Field1.Field1, "%d");
+	ASSERT_EQ(frame->Field1.Field3, str->Field1.Field3, "%d");
+	ASSERT_EQ(frame->Field1.Field4, str->Field1.Field4, "%d");
+	ASSERT_EQ(frame->Field2, str->Field2, "%d");
+
+	frame_proxy_free(&p);
+}
+
 int main (int argc, char *argv[])
 {
 	init_highflyers_protocol ();
@@ -182,9 +259,9 @@ int main (int argc, char *argv[])
 	test_struct_serialize_test ();
 	test_struct_serialize_parser_test ();
 
-	//second_struct_parser_test ();
+	second_struct_parser_test ();
 	second_struct_serialize_test ();
-	//second_struct_serialize_parser_test ();
+	second_struct_serialize_parser_test ();
 
 	TEST_SUMMARY
 

@@ -30,12 +30,12 @@ typedef struct
 void frame_preparse_data (const byte* data, bool* output, int field_count);
 void frame_finalise(const byte* data, int size, bool* output);
 
-TestStruct* TestStruct_parse (const byte* data, int size);
+TestStruct* TestStruct_parse (const byte* data);
 int TestStruct_current_size (const TestStruct* value);
 int TestStruct_preserialize (const TestStruct* value, byte* output);
 void TestStruct_serialize (const TestStruct* value, byte* output);
 
-SecondStruct* SecondStruct_parse (const byte* data, int size);
+SecondStruct* SecondStruct_parse (const byte* data);
 int SecondStruct_current_size (const SecondStruct* value);
 int SecondStruct_preserialize (const SecondStruct* value, byte* output);
 void SecondStruct_serialize (const SecondStruct* value, byte* output);

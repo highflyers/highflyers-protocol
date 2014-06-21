@@ -33,7 +33,7 @@ void frame_finalise(const byte* data, int size, bool* output)
 	FRAMEPARSER_HELPER_ENDFRAME);
 }
 
-TestStruct* TestStruct_parse (const byte* data, int size)
+TestStruct* TestStruct_parse (const byte* data)
 {
 	bool fields[4];
 	int iterator = 0;
@@ -58,6 +58,7 @@ TestStruct* TestStruct_parse (const byte* data, int size)
 		iterator += sizeof(double);
 		value->Field2_enabled = true;
 	}
+	else value->Field2_enabled = false;
 	if (fields[2])
 	{
 		value->Field3 = data[iterator + 2];
@@ -74,13 +75,14 @@ TestStruct* TestStruct_parse (const byte* data, int size)
 		iterator += sizeof(uint32);
 		value->Field4_enabled = true;
 	}
+	else value->Field4_enabled = false;
 
 	return value;
 }
 
 int TestStruct_current_size (const TestStruct* value)
 {
-	int size = 3; //struct type + enable flags
+	int size = 2; //enable flags
 	size += sizeof(uint32);
 	if (value->Field2_enabled) size += sizeof(double);
 	size += sizeof(byte);
@@ -92,9 +94,7 @@ int TestStruct_current_size (const TestStruct* value)
 int TestStruct_preserialize (const TestStruct* value, byte* output)
 {
 	uint16 must_be = 0;
-	int iterator = 3;
-
-	output[0] = 0;
+	int iterator = 2;
 
 	must_be = (uint16)(must_be | (1 << 0));
 	frame_parser_helper_set_uint32 (output + iterator, value->Field1);
@@ -118,35 +118,77 @@ int TestStruct_preserialize (const TestStruct* value, byte* output)
 		iterator += sizeof(int32);
 	}
 
-	frame_parser_helper_set_uint16 (output + 1, must_be);
+	frame_parser_helper_set_uint16 (output, must_be);
 
 	return iterator;
 }
 
 void TestStruct_serialize (const TestStruct* value, byte* output)
 {
-	int frame_size = TestStruct_current_size (value) + sizeof(uint32); // struct + crc32
+	int frame_size = 1 + TestStruct_current_size (value) + sizeof(uint32); // struct + crc32
 
 	byte* data = (byte*)malloc (frame_size);
 
-	int iterator = TestStruct_preserialize(value, data);
+	data[0] = 0;
+
+	int iterator = TestStruct_preserialize(value, data + 1);
 
 	uint32 crc = frame_parser_helper_calculate_crc (data, iterator);
 
-	frame_parser_helper_set_uint32 (data + iterator, crc);
+	frame_parser_helper_set_uint32 (data + 1 + iterator, crc);
 
 	frame_finalise(data, frame_size, output);
 	free(data);
 }
 
 
-SecondStruct* SecondStruct_parse (const byte* data, int size)
+SecondStruct* SecondStruct_parse (const byte* data)
 {
+	bool fields[3];
+	int iterator = 2;
+	SecondStruct* value;
+
+	value = (SecondStruct*)malloc(sizeof(SecondStruct));
+	frame_preparse_data(data, fields, 3);
+
+	if (fields[0])
+	{
+		TestStruct* ts = TestStruct_parse(data + iterator);
+		value->Field1 = *ts;
+		free(ts);
+		iterator += TestStruct_current_size(&value->Field1);
+	}
+	else
+	{
+		free (value);
+		return NULL;
+	}
+	if (fields[1])
+	{
+		value->Field2 = data[iterator];
+		iterator += sizeof(byte);
+	}
+	else
+	{
+		free (value);
+		return NULL;
+	}
+	if (fields[2])
+	{
+		TestStruct* ts = TestStruct_parse(data + iterator);
+		value->Field3 = *ts;
+		free(ts);
+		iterator += TestStruct_current_size(&value->Field3);
+		value->Field3_enabled = true;
+	}
+	else value->Field3_enabled = false;
+
+	return value;
 }
 
 int SecondStruct_current_size (const SecondStruct* value)
 {
-	int size = 3; //struct type + enable flags
+	int size = 2; //enable flags
 	size += TestStruct_current_size(&value->Field1);
 	size += sizeof(byte);
 	if (value->Field3_enabled) size += TestStruct_current_size(&value->Field3);
@@ -157,9 +199,7 @@ int SecondStruct_current_size (const SecondStruct* value)
 int SecondStruct_preserialize (const SecondStruct* value, byte* output)
 {
 	uint16 must_be = 0;
-	int iterator = 3;
-
-	output[0] = 0;
+	int iterator = 2;
 
 	must_be = (uint16)(must_be | (1 << 0));
 
@@ -184,22 +224,24 @@ int SecondStruct_preserialize (const SecondStruct* value, byte* output)
 		iterator += size_f3;
 	}
 
-	frame_parser_helper_set_uint16 (output + 1, must_be);
+	frame_parser_helper_set_uint16 (output, must_be);
 
 	return iterator;
 }
 
 void SecondStruct_serialize (const SecondStruct* value, byte* output)
 {
-	int frame_size = SecondStruct_current_size (value) + sizeof(uint32); // struct + crc32
+	int frame_size = 1 + SecondStruct_current_size (value) + sizeof(uint32); // struct + crc32
 
 	byte* data = (byte*)malloc (frame_size);
 
-	int iterator = SecondStruct_preserialize(value, data);
+	data[0] = 1;
+
+	int iterator = SecondStruct_preserialize(value, data + 1);
 
 	uint32 crc = frame_parser_helper_calculate_crc (data, iterator);
 
-	frame_parser_helper_set_uint32 (data + iterator, crc);
+	frame_parser_helper_set_uint32 (data + 1 + iterator, crc);
 
 	frame_finalise(data, frame_size, output);
 	free(data);

@@ -16,12 +16,15 @@ FrameProxy frame_builder_build_frame (byte* bytes, int size)
 	switch (frame_type)
 	{
 	case T_TestStruct:
-		proxy.pointer = (void*)TestStruct_parse (bytes + 1, size - 4);
+		proxy.pointer = (void*)TestStruct_parse (bytes + 1);
 		break;
-	default: 
+	case T_SecondStruct:
+		proxy.pointer = (void*)SecondStruct_parse (bytes + 1);
+		break;
+	default:
 		break;
 	}
-	
+
 	return proxy;
 }
 
