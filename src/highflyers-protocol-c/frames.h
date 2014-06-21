@@ -5,7 +5,8 @@
 
 typedef enum
 {
-	T_TestStruct
+	T_TestStruct,
+	T_SecondStruct
 } FrameTypes;
 
 typedef struct
@@ -18,10 +19,25 @@ typedef struct
 	bool Field4_enabled;
 } TestStruct;
 
+typedef struct
+{
+	TestStruct Field1;
+	byte Field2;
+	TestStruct Field3;
+	bool Field3_enabled;
+} SecondStruct;
+
 void frame_preparse_data (const byte* data, bool* output, int field_count);
+void frame_finalise(const byte* data, int size, bool* output);
 
 TestStruct* TestStruct_parse (const byte* data, int size);
 int TestStruct_current_size (const TestStruct* value);
+int TestStruct_preserialize (const TestStruct* value, byte* output);
 void TestStruct_serialize (const TestStruct* value, byte* output);
+
+SecondStruct* SecondStruct_parse (const byte* data, int size);
+int SecondStruct_current_size (const SecondStruct* value);
+int SecondStruct_preserialize (const SecondStruct* value, byte* output);
+void SecondStruct_serialize (const SecondStruct* value, byte* output);
 
 #endif

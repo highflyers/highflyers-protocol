@@ -3,6 +3,7 @@
 #include "TestFramework/TestFramework.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void check_frame_parser_helper_to_uint32 ()
 {
@@ -11,7 +12,7 @@ void check_frame_parser_helper_to_uint32 ()
 	ASSERT_EQ(v , 276, "%d")
 }
 
-void simple_parser_test ()
+void test_struct_parser_test ()
 {
 	byte bytes[] = { 0, 255, 255,
 			FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0,
@@ -39,7 +40,7 @@ void simple_parser_test ()
 	frame_proxy_free(&p);
 }
 
-void serialize_parser_test ()
+void test_struct_serialize_parser_test ()
 {
 	int i;
 	TestStruct* str = (TestStruct*)malloc(sizeof(TestStruct));
@@ -80,12 +81,12 @@ void serialize_parser_test ()
 	frame_proxy_free(&p);
 }
 
-void serialize_test ()
+void test_struct_serialize_test ()
 {
 	byte bytes[] =
 	{ 0, 15, 0,
 	FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0,
-	FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 64, 23, 3, 11, 5,
+	10, 64, 23, 3, 11, 5,
 			2, 4, 2,
 			FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 4, 2, 1,
 			114, 84, 5, 19,
@@ -93,7 +94,9 @@ void serialize_test ()
 	int i;
 	TestStruct* str = (TestStruct*)malloc (sizeof(TestStruct));
 	str->Field1 = 256 + FRAMEPARSER_HELPER_ENDFRAME;
+	memcpy(&str->Field2, bytes + 8, sizeof(double));
 	str->Field3 = 2;
+	str->Field4 = 16909325;
 
 	str->Field2_enabled = 1;
 	str->Field4_enabled = 1;
@@ -105,13 +108,64 @@ void serialize_test ()
 	TestStruct_serialize (str, data);
 
 	bool passed = 1;
+	for (i = 0; i < sizeof(bytes); i++)
+	{
+		if (i > (sizeof(bytes) - 6)) continue; // skip crc32 check
 
-	for (i = 0; i < sizeof(bytes) - 5; i++)
 		if (bytes[i] != data[i])
 		{
 			passed = 0;
 			break;
 		}
+	}
+
+	ASSERT_TRUE(passed);
+
+	free (data);
+	free (str);
+}
+
+void second_struct_serialize_test ()
+{
+	byte bytes[] =
+	{ 0, 7, 0, 0, FRAMEPARSER_HELPER_SENTINEL, FRAMEPARSER_HELPER_SENTINEL, 0,
+			101, 0, 0, 0, 243, 32, 0, 0, 0, 55, 0, FRAMEPARSER_HELPER_SENTINEL,
+			FRAMEPARSER_HELPER_SENTINEL, 0, 43, 0, 0, 0, 223, 210, 4, 0, 0, 75,
+			255, 255, 255, FRAMEPARSER_HELPER_ENDFRAME };
+	int i;
+	SecondStruct* str = (SecondStruct*)malloc (sizeof(SecondStruct));
+	str->Field1.Field1 = 101;
+	str->Field1.Field2_enabled = 0;
+	str->Field1.Field3 = 243;
+	str->Field1.Field4_enabled = 1;
+	str->Field1.Field4 = 32;
+
+	str->Field2 = 55;
+
+	str->Field3.Field1 = 43;
+	str->Field3.Field2_enabled = 0;
+	str->Field3.Field3 = 223;
+	str->Field3.Field4_enabled = 1;
+	str->Field3.Field4 = 1234;
+	str->Field3_enabled = 1;
+
+	int frame_size = sizeof(bytes);
+
+	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
+
+	SecondStruct_serialize (str, data);
+
+	bool passed = 1;
+	for (i = 0; i < sizeof(bytes); i++)
+	{
+		if (i > (sizeof(bytes) - 6)) continue; // skip crc32 check
+
+		if (bytes[i] != data[i])
+		{
+			passed = 0;
+			break;
+		}
+	}
 
 	ASSERT_TRUE(passed);
 
@@ -123,9 +177,14 @@ int main (int argc, char *argv[])
 {
 	init_highflyers_protocol ();
 	check_frame_parser_helper_to_uint32 ();
-	simple_parser_test ();
-	serialize_test ();
-	serialize_parser_test ();
+
+	test_struct_parser_test ();
+	test_struct_serialize_test ();
+	test_struct_serialize_parser_test ();
+
+	//second_struct_parser_test ();
+	second_struct_serialize_test ();
+	//second_struct_serialize_parser_test ();
 
 	TEST_SUMMARY
 
