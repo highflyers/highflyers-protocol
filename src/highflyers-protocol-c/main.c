@@ -53,19 +53,18 @@ void test_struct_parser_test ()
 void test_struct_serialize_parser_test ()
 {
 	int i;
-	TestStruct* str = (TestStruct*)malloc(sizeof(TestStruct));
-	str->Field1 = 32;
-	str->Field3 = 13;
-	str->Field4 = 108;
+	TestStruct str;
+	str.Field1 = 32;
+	str.Field3 = 13;
+	str.Field4 = 108;
 
-	str->Field2_enabled = 0;
-	str->Field4_enabled = 1;
+	str.Field2_enabled = 0;
+	str.Field4_enabled = 1;
 
 	int frame_size = 30;
+	byte data[frame_size];
 
-	byte* data = (byte*)malloc(frame_size);
-
-	TestStruct_serialize(str, data);
+	TestStruct_serialize(&str, data);
 
 	HighFlyersParser parser;
 
@@ -82,12 +81,10 @@ void test_struct_serialize_parser_test ()
 	FrameProxy p = parser_get_last_frame_ownership(&parser);
 	TestStruct* frame = (TestStruct*)p.pointer;
 	ASSERT_TRUE(frame);
-	ASSERT_EQ(str->Field1, frame->Field1, "%d");
-	ASSERT_EQ(str->Field3, frame->Field3, "%d");
-	ASSERT_EQ(str->Field4, frame->Field4, "%d");
+	ASSERT_EQ(str.Field1, frame->Field1, "%d");
+	ASSERT_EQ(str.Field3, frame->Field3, "%d");
+	ASSERT_EQ(str.Field4, frame->Field4, "%d");
 
-	free(data);
-	free(str);
 	frame_proxy_free(&p);
 }
 
@@ -101,19 +98,18 @@ void test_struct_serialize_test ()
 	FRAMEPARSER_HELPER_ENDFRAME, 1, 0, 0, 2, 47, 1, 0, 0, 221, 254, 140, 25,
 	FRAMEPARSER_HELPER_ENDFRAME };
 	int i;
-	TestStruct* str = (TestStruct*)malloc (sizeof(TestStruct));
-	str->Field1 = 256 + FRAMEPARSER_HELPER_ENDFRAME;
-	str->Field3 = 2;
-	str->Field4 = 303;
+	TestStruct str;
+	str.Field1 = 256 + FRAMEPARSER_HELPER_ENDFRAME;
+	str.Field3 = 2;
+	str.Field4 = 303;
 
-	str->Field2_enabled = 0;
-	str->Field4_enabled = 1;
+	str.Field2_enabled = 0;
+	str.Field4_enabled = 1;
 
 	int frame_size = sizeof(bytes);
+	byte data[frame_size];
 
-	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
-
-	TestStruct_serialize (str, data);
+	TestStruct_serialize (&str, data);
 
 	bool passed = 1;
 	for (i = 0; i < sizeof(bytes); i++)
@@ -126,9 +122,6 @@ void test_struct_serialize_test ()
 	}
 
 	ASSERT_TRUE(passed);
-
-	free (data);
-	free (str);
 }
 
 
@@ -177,27 +170,26 @@ void second_struct_serialize_test ()
 			FRAMEPARSER_HELPER_SENTINEL, 0, 43, 0, 0, 0, 223, 210, 4, 0, 0, 182,
 			153, 208, 66, FRAMEPARSER_HELPER_ENDFRAME };
 	int i;
-	SecondStruct* str = (SecondStruct*)malloc (sizeof(SecondStruct));
-	str->Field1.Field1 = 101;
-	str->Field1.Field2_enabled = 0;
-	str->Field1.Field3 = 243;
-	str->Field1.Field4_enabled = 1;
-	str->Field1.Field4 = 32;
+	SecondStruct str;
+	str.Field1.Field1 = 101;
+	str.Field1.Field2_enabled = 0;
+	str.Field1.Field3 = 243;
+	str.Field1.Field4_enabled = 1;
+	str.Field1.Field4 = 32;
 
-	str->Field2 = 55;
+	str.Field2 = 55;
 
-	str->Field3.Field1 = 43;
-	str->Field3.Field2_enabled = 0;
-	str->Field3.Field3 = 223;
-	str->Field3.Field4_enabled = 1;
-	str->Field3.Field4 = 1234;
-	str->Field3_enabled = 1;
+	str.Field3.Field1 = 43;
+	str.Field3.Field2_enabled = 0;
+	str.Field3.Field3 = 223;
+	str.Field3.Field4_enabled = 1;
+	str.Field3.Field4 = 1234;
+	str.Field3_enabled = 1;
 
 	int frame_size = sizeof(bytes);
+	byte data[frame_size];
 
-	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
-
-	SecondStruct_serialize (str, data);
+	SecondStruct_serialize (&str, data);
 
 	bool passed = 1;
 	for (i = 0; i < sizeof(bytes); i++)
@@ -210,31 +202,28 @@ void second_struct_serialize_test ()
 	}
 
 	ASSERT_TRUE(passed);
-
-	free (data);
-	free (str);
 }
 
 void second_struct_serialize_parser_test ()
 {
 	int i;
-	SecondStruct* str = (SecondStruct*)malloc(sizeof(SecondStruct));
+	SecondStruct str;
 	TestStruct ts;
 	ts.Field1 = 256 + 5;
 	ts.Field3 = 80;
 	ts.Field4 = 52;
 	ts.Field2_enabled = 0;
 	ts.Field4_enabled = 1;
-	str->Field1 = ts;
+	str.Field1 = ts;
 
-	str->Field2 = 98;
-	str->Field3_enabled = 0;
+	str.Field2 = 98;
+	str.Field3_enabled = 0;
 
 	int frame_size = 22;
 
-	byte* data = (byte*)malloc (sizeof(byte) * frame_size);
+	byte data[frame_size];
 
-	SecondStruct_serialize (str, data);
+	SecondStruct_serialize (&str, data);
 
 	HighFlyersParser parser;
 
@@ -248,10 +237,10 @@ void second_struct_serialize_parser_test ()
 	ASSERT_EQ(T_SecondStruct, p.type, "%d");
 	SecondStruct* frame = (SecondStruct*)p.pointer;
 	ASSERT_TRUE(frame);
-	ASSERT_EQ(frame->Field1.Field1, str->Field1.Field1, "%d");
-	ASSERT_EQ(frame->Field1.Field3, str->Field1.Field3, "%d");
-	ASSERT_EQ(frame->Field1.Field4, str->Field1.Field4, "%d");
-	ASSERT_EQ(frame->Field2, str->Field2, "%d");
+	ASSERT_EQ(frame->Field1.Field1, str.Field1.Field1, "%d");
+	ASSERT_EQ(frame->Field1.Field3, str.Field1.Field3, "%d");
+	ASSERT_EQ(frame->Field1.Field4, str.Field1.Field4, "%d");
+	ASSERT_EQ(frame->Field2, str.Field2, "%d");
 
 	frame_proxy_free(&p);
 }
