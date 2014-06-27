@@ -24,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="BeforeBuild" command="" />
+        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/${ProjectConfigName}/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-test/Frames.cs ${SolutionDir}/highflyers-protocol-test/FrameBuilder.cs" pauseExternalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -35,6 +35,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/${ProjectConfigName}/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-test/Frames.cs ${SolutionDir}/highflyers-protocol-test/FrameBuilder.cs" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,7 +60,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)..\highflyers-protocol-generator\bin\$(ConfigurationName)\HFCsGenerator.exe D:\sample.txt $(ProjectDir)Frames.cs $(ProjectDir)FrameBuilder.Build.cs</PreBuildEvent>
+    <PreBuildEvent>$(ProjectDir)..\highflyers-protocol-generator\bin\$(ConfigurationName)\HFCsGenerator.exe $(ProjectDir)..\highflyers-protocol-test\test_description.hfproto $(ProjectDir)..\highflyers-protocol-test\Frames.cs $(ProjectDir)..\highflyers-protocol-test\FrameBuilder.cs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
