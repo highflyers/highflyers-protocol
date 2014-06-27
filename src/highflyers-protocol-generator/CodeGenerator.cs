@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HighFlyers.Protocol.Generator.Types;
 
 namespace HighFlyers.Protocol.Generator
 {
     internal class CodeGenerator
     {
-        enum CurrentType
-        {
-            None,
-            Structure,
-            Enumeration
-        }
-
-        readonly List<ObjectType> objectsTypes = new List<ObjectType>();
-        private string[] data;
+        private readonly string builderFileName;
         private readonly List<string[]> currentCollector = new List<string[]>();
         private readonly string framesFileName;
         private readonly string inputFileName;
-        private readonly string builderFileName;
+        private readonly List<ObjectType> objectsTypes = new List<ObjectType>();
         private CurrentType currType = CurrentType.None;
-        private bool wasStartBracket;
-		private byte idCounter = 0;
-        
+
         private string currentName;
+        private string[] data;
+        private byte idCounter;
+        private bool wasStartBracket;
 
         public CodeGenerator(string inputFileName, string framesFileName, string builderFileName)
         {
@@ -44,12 +39,12 @@ namespace HighFlyers.Protocol.Generator
 
         private void ReadFromFile()
         {
-            data = System.IO.File.ReadAllLines(inputFileName);
+            data = File.ReadAllLines(inputFileName);
         }
 
         private void SaveToFile(string fileName, string content)
         {
-            var file = new System.IO.StreamWriter(fileName);
+            var file = new StreamWriter(fileName);
             file.WriteLine(content);
             file.Close();
         }
@@ -57,9 +52,9 @@ namespace HighFlyers.Protocol.Generator
         private void PrepareData()
         {
             foreach (
-                string[] words in
+                var words in
                     data.Select(
-                        line => System.Text.RegularExpressions.Regex.Replace(line.Trim(), @"\s+", " ").Split(' '))
+                        line => Regex.Replace(line.Trim(), @"\s+", " ").Split(' '))
                         .Where(words => words.Length != 0 && !string.IsNullOrEmpty(words[0])))
             {
                 if (words.Length == 2 && (words[0] == "struct" || words[0] == "enum"))
@@ -89,15 +84,15 @@ namespace HighFlyers.Protocol.Generator
             }
         }
 
-        void AddNewObjectType(byte id)
+        private void AddNewObjectType(byte id)
         {
             if (!wasStartBracket || currType == CurrentType.None)
                 throw new Exception("Unexpected '}' token");
-            
+
             switch (currType)
             {
                 case CurrentType.Structure:
-					objectsTypes.Add(new Structure(currentName, currentCollector.ToArray(), id));
+                    objectsTypes.Add(new Structure(currentName, currentCollector.ToArray(), id));
                     break;
                 case CurrentType.Enumeration:
                     objectsTypes.Add(new Enumeration(currentName, currentCollector.ToArray()));
@@ -106,6 +101,13 @@ namespace HighFlyers.Protocol.Generator
 
             wasStartBracket = false;
             currType = CurrentType.None;
+        }
+
+        private enum CurrentType
+        {
+            None,
+            Structure,
+            Enumeration
         }
     }
 }

@@ -2,16 +2,17 @@
 
 namespace HighFlyers.Protocol.Generator.Types
 {
-    abstract class ObjectType
+    internal abstract class ObjectType
     {
         protected readonly string[][] Input;
-        public string Name { get; private set; }
 
         protected ObjectType(string name, string[][] input)
         {
             Input = input;
             Name = name;
         }
+
+        public string Name { get; private set; }
 
         protected abstract string GenerateHeader();
         protected abstract IEnumerable<string> GenerateBody();
@@ -24,8 +25,8 @@ namespace HighFlyers.Protocol.Generator.Types
         public IEnumerable<string> GenerateClass()
         {
             yield return GenerateHeader();
-    
-            foreach (var line in GenerateBody())
+
+            foreach (string line in GenerateBody())
                 yield return "\t" + line;
 
             yield return GenerateBottom();

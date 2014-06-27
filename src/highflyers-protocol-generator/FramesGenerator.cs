@@ -5,7 +5,7 @@ using HighFlyers.Protocol.Generator.Types;
 
 namespace HighFlyers.Protocol.Generator
 {
-    class FramesGenerator
+    internal class FramesGenerator
     {
         private readonly StringBuilder builder = new StringBuilder();
         private List<ObjectType> objectsTypes;
@@ -51,7 +51,7 @@ namespace HighFlyers.Protocol.Generator
 
         private void GenerateObjectTypes()
         {
-            foreach (var line in objectsTypes.SelectMany(objType => objType.GenerateClass()))
+            foreach (string line in objectsTypes.SelectMany(objType => objType.GenerateClass()))
             {
                 builder.Append("\t");
                 builder.AppendLine(line);

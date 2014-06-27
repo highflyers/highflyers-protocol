@@ -3,9 +3,9 @@ using System.Diagnostics;
 
 namespace HighFlyers.Protocol.Generator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length != 3)
             {

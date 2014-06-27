@@ -8,8 +8,8 @@ namespace HighFlyers.Protocol.Generator
     internal class FrameBuilderGenerator
     {
         private readonly StringBuilder lines = new StringBuilder();
-        List<ObjectType> types;
-        
+        private List<ObjectType> types;
+
         public string GenerateCode(List<ObjectType> definedTypes)
         {
             lines.Clear();
@@ -42,11 +42,11 @@ namespace HighFlyers.Protocol.Generator
 
         private void GenerateBuildMethod()
         {
-			lines.AppendLine("\t\tpublic static Frame BuildFrame(List<byte> bytes)");
+            lines.AppendLine("\t\tpublic static Frame BuildFrame(List<byte> bytes)");
             lines.AppendLine("\t\t{");
             lines.AppendLine("\t\t\tFrameParserHelper.CheckBytes(bytes);");
-			lines.AppendLine ("\t\t\tvar endianes = (FrameParserHelper.EndianType)(bytes [0] & 128);");
-			lines.AppendLine ("\t\t\tvar frameType = (FrameTypes)(bytes [0] & 127);");
+            lines.AppendLine("\t\t\tvar endianes = (FrameParserHelper.EndianType)(bytes [0] & 128);");
+            lines.AppendLine("\t\t\tvar frameType = (FrameTypes)(bytes [0] & 127);");
             lines.AppendLine("\t\t\tFrame frame;");
             lines.AppendLine("\t\t\tswitch (frameType)");
             lines.AppendLine("\t\t\t{");
@@ -57,10 +57,9 @@ namespace HighFlyers.Protocol.Generator
             }
             lines.AppendLine("\t\t\t\tdefault: throw new InvalidDataException(\"Unexpected frame type\");");
             lines.AppendLine("\t\t\t}");
-			lines.AppendLine("\t\t\tframe.Parse(bytes.GetRange(1, bytes.Count - 3), endianes);");
+            lines.AppendLine("\t\t\tframe.Parse(bytes.GetRange(1, bytes.Count - 3), endianes);");
             lines.AppendLine("\t\t\treturn frame;");
             lines.AppendLine("\t\t}");
         }
     }
 }
-

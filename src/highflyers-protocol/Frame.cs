@@ -19,27 +19,27 @@ namespace HighFlyers.Protocol
             return fields;
         }
 
-		public abstract List<byte> Serialize ();
+        public abstract List<byte> Serialize();
 
-		public byte[] FullSerialize ()
-		{
-			var data = Serialize ();
-			data.AddRange (BitConverter.GetBytes (Crc32.CalculateCrc32 (data.ToArray ())));
-			var finishData = new List<byte> ();
+        public byte[] FullSerialize()
+        {
+            List<byte> data = Serialize();
+            data.AddRange(BitConverter.GetBytes(Crc32.CalculateCrc32(data.ToArray())));
+            var finishData = new List<byte>();
 
-			foreach (var d in data) {
-				if (d == FrameParserHelper.EndFrame || d == FrameParserHelper.Sentinel)
-					finishData.Add (FrameParserHelper.Sentinel);
+            foreach (byte d in data)
+            {
+                if (d == FrameParserHelper.EndFrame || d == FrameParserHelper.Sentinel)
+                    finishData.Add(FrameParserHelper.Sentinel);
 
-				finishData.Add (d);
-			}
+                finishData.Add(d);
+            }
 
-			finishData.Add (FrameParserHelper.EndFrame);
+            finishData.Add(FrameParserHelper.EndFrame);
 
-			return finishData.ToArray ();
-		}
+            return finishData.ToArray();
+        }
 
         public abstract void Parse(List<byte> bytes, FrameParserHelper.EndianType endian);
     }
-
 }

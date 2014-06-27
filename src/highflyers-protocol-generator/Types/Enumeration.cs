@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HighFlyers.Protocol.Generator.Types
 {
-    class Enumeration : ObjectType
+    internal class Enumeration : ObjectType
     {
         public Enumeration(string name, string[][] input)
             : base(name, input)
