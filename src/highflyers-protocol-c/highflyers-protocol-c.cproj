@@ -20,12 +20,6 @@
     <CompileTarget>Bin</CompileTarget>
     <DefineSymbols>DEBUG MONODEVELOP</DefineSymbols>
     <SourceDirectory>.</SourceDirectory>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/Debug/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-c/frames ${SolutionDir}/highflyers-protocol-c/frame_builder --language=c" externalConsole="True" />
-        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/Release/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-c/frames ${SolutionDir}/highflyers-protocol-c/frame_builder --language=c" externalConsole="True" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release</OutputPath>
@@ -37,22 +31,12 @@
     <SourceDirectory>.</SourceDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="main.c" />
     <Compile Include="parser.c" />
     <Compile Include="frame_parser_helper.c" />
-    <Compile Include="TestFramework\TestFramework.c" />
-    <Compile Include="frame_builder.c" />
-    <Compile Include="frames.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="parser.h" />
     <None Include="frame_parser_helper.h" />
-    <None Include="TestFramework\TestFramework.h" />
-    <None Include="frame_builder.h" />
-    <None Include="frames.h" />
     <None Include="types.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestFramework\" />
   </ItemGroup>
 </Project>
