@@ -20,6 +20,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/${ProjectConfigName}/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-test/Frames.cs ${SolutionDir}/highflyers-protocol-test/FrameBuilder.cs" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

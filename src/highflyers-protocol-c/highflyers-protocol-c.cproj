@@ -20,6 +20,12 @@
     <CompileTarget>Bin</CompileTarget>
     <DefineSymbols>DEBUG MONODEVELOP</DefineSymbols>
     <SourceDirectory>.</SourceDirectory>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/Debug/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-c/frames ${SolutionDir}/highflyers-protocol-c/frame_builder --language=c" externalConsole="True" />
+        <Command type="BeforeBuild" command="${SolutionDir}/highflyers-protocol-generator/bin/Release/HFCsGenerator.exe ${SolutionDir}/highflyers-protocol-test/test_description.hfproto ${SolutionDir}/highflyers-protocol-c/frames ${SolutionDir}/highflyers-protocol-c/frame_builder --language=c" externalConsole="True" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release</OutputPath>
