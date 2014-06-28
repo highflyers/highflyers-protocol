@@ -43,18 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CGenerator\FrameBuilderGeneratorHeader.cs" />
+    <Compile Include="CGenerator\FrameBuilderGenerator.cs" />
+    <Compile Include="CGenerator\FramesGeneratorHeader.cs" />
+    <Compile Include="CGenerator\FramesGenerator.cs" />
+    <Compile Include="CGenerator\Types\Enumeration.cs" />
+    <Compile Include="CGenerator\Types\ObjectType.cs" />
+    <Compile Include="CGenerator\Types\Structure.cs" />
     <Compile Include="CodeGenerator.cs" />
-    <Compile Include="FrameBuilderGenerator.cs" />
-    <Compile Include="FramesGenerator.cs" />
+    <Compile Include="CSharpGenerator\FrameBuilderGenerator.cs" />
+    <Compile Include="CSharpGenerator\FramesGenerator.cs" />
+    <Compile Include="CSharpGenerator\Types\Enumeration.cs" />
+    <Compile Include="CSharpGenerator\Types\ObjectType.cs" />
+    <Compile Include="CSharpGenerator\Types\Structure.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Enumeration.cs" />
-    <Compile Include="Types\ObjectType.cs" />
-    <Compile Include="Types\Structure.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

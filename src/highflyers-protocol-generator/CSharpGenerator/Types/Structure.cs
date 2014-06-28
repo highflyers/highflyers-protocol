@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HighFlyers.Protocol.Generator.Types
+namespace HighFlyers.Protocol.Generator.CSharpGenerator.Types
 {
     internal class Structure : ObjectType
     {

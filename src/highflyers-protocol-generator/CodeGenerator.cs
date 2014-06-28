@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using HighFlyers.Protocol.Generator.Types;
 
 namespace HighFlyers.Protocol.Generator
 {
     internal class CodeGenerator
     {
         private readonly string builderFileName;
+        private readonly List<CGenerator.Types.ObjectType> cObjectsTypes;
+        private readonly List<CSharpGenerator.Types.ObjectType> cSharpObjectsTypes;
         private readonly List<string[]> currentCollector = new List<string[]>();
         private readonly string framesFileName;
         private readonly string inputFileName;
-        private readonly List<ObjectType> objectsTypes = new List<ObjectType>();
+        private readonly Languages selectedLanguage;
         private CurrentType currType = CurrentType.None;
 
         private string currentName;
@@ -21,11 +22,25 @@ namespace HighFlyers.Protocol.Generator
         private byte idCounter;
         private bool wasStartBracket;
 
-        public CodeGenerator(string inputFileName, string framesFileName, string builderFileName)
+        public CodeGenerator(string inputFileName, string framesFileName, string builderFileName, string language)
         {
             this.inputFileName = inputFileName;
             this.framesFileName = framesFileName;
             this.builderFileName = builderFileName;
+
+            switch (language)
+            {
+                case "c":
+                    selectedLanguage = Languages.C;
+                    cObjectsTypes = new List<CGenerator.Types.ObjectType>();
+                    break;
+                case "c#":
+                    selectedLanguage = Languages.CSharp;
+                    cSharpObjectsTypes = new List<CSharpGenerator.Types.ObjectType>();
+                    break;
+                default:
+                    throw new Exception("Unsupported language");
+            }
         }
 
         public void Generate()
@@ -33,8 +48,20 @@ namespace HighFlyers.Protocol.Generator
             ReadFromFile();
             PrepareData();
 
-            SaveToFile(builderFileName, new FrameBuilderGenerator().GenerateCode(objectsTypes));
-            SaveToFile(framesFileName, new FramesGenerator().GenerateCode(objectsTypes));
+            switch (selectedLanguage)
+            {
+                case Languages.CSharp:
+                    SaveToFile(builderFileName, new CSharpGenerator.FrameBuilderGenerator().GenerateCode(cSharpObjectsTypes));
+                    SaveToFile(framesFileName, new CSharpGenerator.FramesGenerator().GenerateCode(cSharpObjectsTypes));
+                    break;
+                case Languages.C:
+                    SaveToFile(builderFileName + ".h", new CGenerator.FrameBuilderGeneratorHeader().GenerateCode(cObjectsTypes));
+                    SaveToFile(framesFileName + ".h", new CGenerator.FramesGeneratorHeader().GenerateCode(cObjectsTypes));
+                    SaveToFile(builderFileName + ".c",
+                        new CGenerator.FrameBuilderGenerator().GenerateCode(cObjectsTypes));
+                    SaveToFile(framesFileName + ".c", new CGenerator.FramesGenerator().GenerateCode(cObjectsTypes));
+                    break;
+            }
         }
 
         private void ReadFromFile()
@@ -89,13 +116,33 @@ namespace HighFlyers.Protocol.Generator
             if (!wasStartBracket || currType == CurrentType.None)
                 throw new Exception("Unexpected '}' token");
 
-            switch (currType)
+            switch (selectedLanguage)
             {
-                case CurrentType.Structure:
-                    objectsTypes.Add(new Structure(currentName, currentCollector.ToArray(), id));
+                case Languages.CSharp:
+                    switch (currType)
+                    {
+                        case CurrentType.Structure:
+                            cSharpObjectsTypes.Add(new CSharpGenerator.Types.Structure(currentName,
+                                currentCollector.ToArray(), id));
+                            break;
+                        case CurrentType.Enumeration:
+                            cSharpObjectsTypes.Add(new CSharpGenerator.Types.Enumeration(currentName,
+                                currentCollector.ToArray()));
+                            break;
+                    }
                     break;
-                case CurrentType.Enumeration:
-                    objectsTypes.Add(new Enumeration(currentName, currentCollector.ToArray()));
+                case Languages.C:
+                    switch (currType)
+                    {
+                        case CurrentType.Structure:
+                            cObjectsTypes.Add(new CGenerator.Types.Structure(currentName,
+                                currentCollector.ToArray(), id));
+                            break;
+                        case CurrentType.Enumeration:
+                            cObjectsTypes.Add(new CGenerator.Types.Enumeration(currentName,
+                                currentCollector.ToArray()));
+                            break;
+                    }
                     break;
             }
 
@@ -108,6 +155,12 @@ namespace HighFlyers.Protocol.Generator
             None,
             Structure,
             Enumeration
+        }
+
+        private enum Languages
+        {
+            C,
+            CSharp
         }
     }
 }

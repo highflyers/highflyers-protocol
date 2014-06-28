@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HighFlyers.Protocol.Generator.Types
+namespace HighFlyers.Protocol.Generator.CSharpGenerator.Types
 {
     internal class Enumeration : ObjectType
     {

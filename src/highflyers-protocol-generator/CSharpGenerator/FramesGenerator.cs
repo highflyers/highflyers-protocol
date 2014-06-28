@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HighFlyers.Protocol.Generator.Types;
+using HighFlyers.Protocol.Generator.CSharpGenerator.Types;
 
-namespace HighFlyers.Protocol.Generator
+namespace HighFlyers.Protocol.Generator.CSharpGenerator
 {
     internal class FramesGenerator
     {

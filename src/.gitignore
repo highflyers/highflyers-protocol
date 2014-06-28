@@ -111,8 +111,11 @@ UpgradeLog*.XML
 
 # Generated frames
 
-Frames.cpp
-Frames.h
+frame_builder.h
+frames.h
+
+frame_builder.c
+frames.c
 
 Frames.cs
 FrameBuilder.cs
