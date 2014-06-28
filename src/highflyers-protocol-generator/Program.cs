@@ -27,8 +27,7 @@ namespace HighFlyers.Protocol.Generator
                 Console.WriteLine("Cannot generate files: " + ex.Message);
             }
 
-            Console.WriteLine("Press [Enter] ...");
-            Console.ReadLine();
+            Console.WriteLine("Code generation finished!");
         }
     }
 }
