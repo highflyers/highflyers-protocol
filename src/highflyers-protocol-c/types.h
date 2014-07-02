@@ -13,7 +13,9 @@
 #define FRAMEPARSER_HELPER_ENDFRAME 12
 
 typedef unsigned char byte;
+#ifndef __cplusplus
 typedef unsigned char bool;
+#endif
 typedef int int32;
 typedef unsigned int uint32;
 typedef unsigned short uint16;
