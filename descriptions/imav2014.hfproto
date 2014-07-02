@@ -1,0 +1,16 @@
+struct IPAddress
+{
+	UInt32 ip1
+	UInt32 ip2
+	UInt32 ip3
+	UInt32 ip4
+}
+
+struct StreamerInfo
+{
+	IPAddress ip
+	UInt16 port
+	UInt16 width
+	UInt16 height
+}
+
