@@ -1,9 +1,9 @@
 struct IPAddress
 {
-	UInt32 ip1
-	UInt32 ip2
-	UInt32 ip3
-	UInt32 ip4
+	byte ip1
+	byte ip2
+	byte ip3
+	byte ip4
 }
 
 struct StreamerInfo
