@@ -12,5 +12,6 @@ struct StreamerInfo
 	UInt16 port
 	UInt16 width
 	UInt16 height
+	UInt16 framerate
 }
 
