@@ -1,0 +1,1 @@
+execute_process(COMMAND xbuild ${highflyers-protocol_SOURCE_DIR}/src/csharp/highflyers-protocol-csharp.sln)

@@ -1,4 +1,4 @@
-#include "../highflyers-protocol-c/parser.h"
+#include "parser.h"
 #include "frames.h"
 #include "TestFramework/TestFramework.h"
 #include <stdio.h>

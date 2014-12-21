@@ -71,4 +71,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\highflyers-protocol\highflyers-protocol.csproj">
+      <Project>{EBB700AD-54C4-4AEE-90B4-A6C074617999}</Project>
+      <Name>highflyers-protocol</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

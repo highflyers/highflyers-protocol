@@ -1,0 +1,2 @@
+add_subdirectory(highflyers-protocol)
+add_subdirectory(highflyers-protocol-test)
